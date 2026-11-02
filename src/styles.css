@@ -384,3 +384,16 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-i
 .artist-right { margin-left: -8% !important; }
 @media (min-width:768px){ .hero-cover{height:720px !important;} .hero-artists{inset:260px 10% 0 !important;} .hero-artist{flex-basis:38% !important;} }
 .hero-cover{height:440px !important}.hero-artists{inset:120px -10px 0 !important}@media (min-width:768px){.hero-cover{height:720px !important}.hero-artists{inset:260px 10% 0 !important}}
+/* ===== FANZINE DETAILS ===== */
+.editorial-site::before { content: "+  CROP 720x1280"; position: fixed; top: 64px; left: 10px; z-index: 64; font: 9px var(--font-mono); color: var(--bone-dim); letter-spacing: .12em; pointer-events: none; }
+.editorial-site::after { content: "35MM / 30FPS  +"; position: fixed; top: 64px; right: 10px; z-index: 64; font: 9px var(--font-mono); color: var(--bone-dim); letter-spacing: .12em; pointer-events: none; }
+.hero-cover::before { content: "OFFICIAL CHALLENGE"; position: absolute; right: 8px; top: 8px; z-index: 7; border: 3px solid var(--opium); color: var(--opium); font: 12px var(--font-mono); letter-spacing: .14em; padding: 4px 8px; transform: rotate(7deg); -webkit-mask: var(--speck); mask: var(--speck); mask-mode: luminance; opacity: .9; }
+.prize-stage::before { content: "[ PROVA REAL ] ↘"; position: absolute; top: -30px; right: 0; z-index: 4; font-family: var(--font-script); font-size: 26px; color: var(--opium); transform: rotate(-4deg); text-transform: none; }
+.prize-grid > *:nth-child(even) .prize-stage::before { content: "GOYARD AUTÊNTICA ↙"; }
+.prize-grid > *:nth-child(odd) .prize-stage { outline: 2px solid var(--opium); outline-offset: 14px; border-radius: 0; }
+.prize-grid { row-gap: 56px; padding-top: 24px; }
+footer { position: relative; }
+footer::before { content: "PARENTAL\A ADVISORY\A EXPLICIT CONTENT"; white-space: pre; display: inline-block; margin: 0 0 24px 20px; background: var(--bone); color: var(--ink); font: 700 10px/1.25 "JetBrains Mono", monospace; letter-spacing: .06em; padding: 6px 10px; border: 3px solid var(--ink); outline: 2px solid var(--bone); text-align: center; }
+footer::after { content: "PRODUCED BY INF8M8US · VOCALS BY KHRIYS · MAPUTO 2026 · FX-001"; display: block; padding: 18px 20px 96px; font: 9px var(--font-mono); letter-spacing: .14em; color: var(--bone-dim); border-top: 1px dashed var(--line); background: repeating-linear-gradient(90deg, var(--bone) 0 2px, transparent 2px 4px, var(--bone) 4px 5px, transparent 5px 9px) right 20px top 18px / 90px 34px no-repeat; }
+.editorial-button:active, .gate-enter:active { filter: invert(1); transition: none; }
+@media (prefers-reduced-motion: reduce) { .editorial-button:active { filter: none; } }
