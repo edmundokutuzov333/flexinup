@@ -63,7 +63,7 @@ function Artist({ side, src, alt, sparkles, delay }: { side: "left" | "right"; s
   const depth = side === "left" ? 18 : 26;
   return (
     <div
-      className={`relative w-[86vw] max-w-[560px] ${side === "left" ? "-mr-[30vw] md:-mr-24" : "-ml-[30vw] md:-ml-24"}`}
+      className={`relative w-[76vw] max-w-[560px] ${side === "left" ? "-mr-[22vw] md:-mr-24" : "-ml-[22vw] md:-ml-24"}`}
       style={{ transform: `translate3d(calc(var(--px) * ${depth}px), calc(var(--py) * ${depth / 2}px), 0)` }}
     >
       <div className="anim-breathe origin-bottom" style={{ animationDelay: `${delay}s` }}>
@@ -71,7 +71,7 @@ function Artist({ side, src, alt, sparkles, delay }: { side: "left" | "right"; s
           <img
             src={src.src}
             srcSet={src.srcSet}
-            sizes="(max-width: 768px) 86vw, 560px"
+            sizes="(max-width: 768px) 76vw, 560px"
             alt={alt}
             width={540}
             height={540}
