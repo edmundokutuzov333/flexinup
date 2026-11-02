@@ -11,8 +11,8 @@
 
 ## Project rules
 - All editable launch content (audio URLs, backstage clips, handles, streaming links, dates, prizes) lives in `src/config/site.ts`; components read from it — never hardcode these elsewhere.
-- Music goes through the single `audio` engine (`src/lib/audio-engine.ts`) so speakers and the recording MediaStreamDestination share one graph; a synthesized beat is the fallback when no track URL is set.
+- Music goes through the single `audio` engine (`src/lib/audio-engine.ts`), with mode selection in `audio-rules.ts`, so speakers and the recording MediaStreamDestination share one graph; mode-specific buffers are ready before recording and a synthesized beat is only the unconfigured fallback.
 - The night-vision filter is one WebGL2 fragment pass (`src/lib/night-vision.ts`) with the HUD drawn to a 2D canvas uploaded as a texture only when it changes — keep per-pixel work out of JS.
 - Entries are inserted only via the `submitEntry` server function (honeypot + hashed-IP rate limit, admin client); public reads go through the `public_entries`/`entries_count` SECURITY DEFINER RPCs; team access is `user_roles` admin + RLS on `/admin`.
 - 3D prizes are lazy-loaded R3F scenes rendering the PNGs as lit stacked planes, mounted only when near the viewport.
-- Public editorial presentation uses global semantic tokens and a shared SectionHeading; the recorder and data functions remain isolated so visual revisions cannot alter capture or entry behavior.
+- Public presentation uses global semantic tokens, shared SectionHeading and isolated SystemEffects for chapter transitions; the recorder and data functions stay isolated so visual revisions cannot alter capture or entry behavior.

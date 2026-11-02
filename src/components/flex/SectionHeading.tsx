@@ -14,7 +14,7 @@ export function SectionHeading({ number, label, title }: { number: string; label
   return (
     <div ref={ref} className="section-heading reveal">
       <div className="signature-line" aria-hidden><span /></div>
-      <p className="editorial-label"><span className="text-gold">{number}</span> / {label}</p>
+      <p className="editorial-label chapter-label"><span className="text-gold">{number}</span> / <span className="chapter-name font-brand rgb-brand" data-text={label}>{label}</span></p>
       {title && <h2 className="section-title font-display text-bone">{title}</h2>}
     </div>
   );

@@ -56,7 +56,7 @@ export function Submit() {
   return (
     <section id="ranking" className="editorial-section page-shell">
       <div className="ranking-layout">
-        <div><SectionHeading number="04" label="O TEU NOME AQUI" title="ENTRA NO RANKING" />
+        <div><SectionHeading number="05" label="O RANKING" title="ENTRA NO RANKING" />
         <p className="ranking-count">
           {data?.count ?? "—"} pessoas já entraram.
         </p></div>

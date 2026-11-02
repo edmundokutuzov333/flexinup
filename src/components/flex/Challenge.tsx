@@ -8,7 +8,7 @@ export function Challenge({ onFilm }: { onFilm: () => void }) {
   const c = site.challenge;
   return (
     <section id="challenge" className="editorial-section page-shell">
-      <SectionHeading number="02" label="THE CHALLENGE" />
+      <SectionHeading number="02" label="A CÂMARA" />
       <div className="challenge-layout">
         <div className="challenge-copy">
           <h2 className="section-title font-display">FAZ O TEU FLEX.<br />30 SEGUNDOS.</h2>

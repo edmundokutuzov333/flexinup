@@ -1,6 +1,5 @@
 import { site } from "@/config/site";
-
-type Mode = "intro" | "challenge" | "full";
+import { audioPlan, type AudioMode as Mode } from "./audio-rules";
 
 /**
  * Motor de áudio único. A música sai para os altifalantes (speaker gain, afetado pelo mute)
@@ -9,20 +8,26 @@ type Mode = "intro" | "challenge" | "full";
  */
 class AudioEngine {
   ctx: AudioContext | null = null;
-  master!: GainNode;
-  speaker!: GainNode;
-  analyser!: AnalyserNode;
-  recDest!: MediaStreamAudioDestinationNode;
+  master: GainNode | null = null;
+  speaker: GainNode | null = null;
+  analyser: AnalyserNode | null = null;
+  private destination: MediaStreamAudioDestinationNode | null = null;
   muted = false;
   playing = false;
-  private track: AudioBuffer | null = null;
-  private clip: AudioBuffer | null = null;
+  mode: Mode | null = null;
+  private buffers = new Map<string, AudioBuffer>();
+  private loading: Promise<void> | null = null;
   private src: AudioBufferSourceNode | null = null;
   private timer: number | null = null;
   private nextBeat = 0;
   private step = 0;
   private noise: AudioBuffer | null = null;
   private listeners = new Set<() => void>();
+
+  get recDest(): MediaStreamAudioDestinationNode {
+    if (!this.destination) throw new Error("Audio must be unlocked before recording");
+    return this.destination;
+  }
 
   subscribe(fn: () => void) {
     this.listeners.add(fn);
@@ -40,7 +45,7 @@ class AudioEngine {
       this.speaker = this.ctx.createGain();
       this.analyser = this.ctx.createAnalyser();
       this.analyser.fftSize = 64;
-      this.recDest = this.ctx.createMediaStreamDestination();
+      this.destination = this.ctx.createMediaStreamDestination();
       this.master.connect(this.analyser);
       this.analyser.connect(this.speaker);
       this.speaker.connect(this.ctx.destination);
@@ -49,43 +54,52 @@ class AudioEngine {
       this.noise = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
       const d = this.noise.getChannelData(0);
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      void this.loadFiles();
+      this.loading = this.loadFiles();
     }
     if (this.ctx.state !== "running") await this.ctx.resume();
+    await this.loading;
   }
 
   private async loadFiles() {
-    const ctx = this.ctx!;
+    const ctx = this.ctx;
+    if (!ctx) return;
     const get = async (url: string) => {
       if (!url) return null;
       try {
         const r = await fetch(url);
+        if (!r.ok) return null;
         return await ctx.decodeAudioData(await r.arrayBuffer());
       } catch {
         return null;
       }
     };
-    [this.track, this.clip] = await Promise.all([get(site.audio.trackUrl), get(site.audio.challengeClipUrl)]);
+    const urls = [...new Set([site.audio.introUrl, site.audio.ambienceUrl, site.audio.trackUrl, site.audio.challengeClipUrl].filter(Boolean))];
+    await Promise.all(urls.map(async (url) => {
+      const buffer = await get(url);
+      if (buffer) this.buffers.set(url, buffer);
+    }));
   }
 
   setMuted(m: boolean) {
     this.muted = m;
-    if (this.ctx) this.speaker.gain.setTargetAtTime(m ? 0 : 1, this.ctx.currentTime, 0.01);
+    if (this.ctx && this.speaker) this.speaker.gain.setTargetAtTime(m ? 0 : 1, this.ctx.currentTime, 0.01);
     this.emit();
   }
 
-  play(mode: Mode, loop = mode === "full") {
-    if (!this.ctx) return;
+  play(mode: Mode, loop = audioPlan(mode).loop) {
+    if (!this.ctx || !this.master) return;
     this.stop();
     this.playing = true;
-    const buf = mode === "challenge" ? this.clip ?? this.track : this.track;
+    this.mode = mode;
+    const plan = audioPlan(mode);
+    this.master.gain.setValueAtTime(plan.volume, this.ctx.currentTime);
+    const buf = this.buffers.get(plan.url);
     if (buf) {
       const s = this.ctx.createBufferSource();
       s.buffer = buf;
       s.loop = loop;
       s.connect(this.master);
-      const offset = mode === "challenge" && !this.clip ? site.audio.challengeOffset : 0;
-      s.start(this.ctx.currentTime + 0.02, offset);
+      s.start(this.ctx.currentTime + 0.02, Math.min(plan.offset, Math.max(0, buf.duration - 0.1)));
       s.onended = () => {
         if (this.src === s) {
           this.playing = false;
@@ -110,6 +124,7 @@ class AudioEngine {
     if (this.timer) clearInterval(this.timer);
     this.timer = null;
     this.playing = false;
+    this.mode = null;
     this.emit();
   }
 
@@ -119,7 +134,7 @@ class AudioEngine {
   }
 
   level() {
-    if (!this.ctx || !this.playing) return new Uint8Array(32);
+    if (!this.ctx || !this.analyser || !this.playing) return new Uint8Array(32);
     const a = new Uint8Array(this.analyser.frequencyBinCount);
     this.analyser.getByteFrequencyData(a);
     return a;
@@ -127,7 +142,8 @@ class AudioEngine {
 
   // ---- Placeholder trap beat (16th grid) ----
   private schedule() {
-    const ctx = this.ctx!;
+    const ctx = this.ctx;
+    if (!ctx) return;
     const sixteenth = 60 / site.audio.bpm / 4;
     while (this.nextBeat < ctx.currentTime + 0.12) {
       const s = this.step % 32;
@@ -146,28 +162,33 @@ class AudioEngine {
     }
   }
   private env(t: number, peak: number, dur: number) {
-    const g = this.ctx!.createGain();
+    if (!this.ctx || !this.master) return null;
+    const g = this.ctx.createGain();
     g.gain.setValueAtTime(peak, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     g.connect(this.master);
     return g;
   }
   private kick(t: number) {
-    const o = this.ctx!.createOscillator();
+    const gain = this.env(t, 0.9, 0.9);
+    if (!this.ctx || !gain) return;
+    const o = this.ctx.createOscillator();
     o.frequency.setValueAtTime(140, t);
     o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
-    o.connect(this.env(t, 0.9, 0.9));
+    o.connect(gain);
     o.start(t);
     o.stop(t + 0.9);
   }
   private noiseHit(t: number, type: BiquadFilterType, f: number, peak: number, dur: number) {
-    const n = this.ctx!.createBufferSource();
+    const gain = this.env(t, peak, dur);
+    if (!this.ctx || !gain) return;
+    const n = this.ctx.createBufferSource();
     n.buffer = this.noise;
-    const bq = this.ctx!.createBiquadFilter();
+    const bq = this.ctx.createBiquadFilter();
     bq.type = type;
     bq.frequency.value = f;
     n.connect(bq);
-    bq.connect(this.env(t, peak, dur));
+    bq.connect(gain);
     n.start(t);
     n.stop(t + dur);
   }
@@ -178,10 +199,12 @@ class AudioEngine {
     this.noiseHit(t, "bandpass", 1600, 0.5, 0.18);
   }
   private bell(t: number, f: number) {
-    const o = this.ctx!.createOscillator();
+    const gain = this.env(t, 0.12, 1.4);
+    if (!this.ctx || !gain) return;
+    const o = this.ctx.createOscillator();
     o.type = "triangle";
     o.frequency.value = f * 2;
-    o.connect(this.env(t, 0.12, 1.4));
+    o.connect(gain);
     o.start(t);
     o.stop(t + 1.4);
   }

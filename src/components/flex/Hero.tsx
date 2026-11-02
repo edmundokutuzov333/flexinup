@@ -15,9 +15,9 @@ export function Hero({ onFilm, onListen }: { onFilm: () => void; onListen: () =>
   }, []);
   return (
     <section ref={ref} id="top" className="editorial-hero">
-      <p className="editorial-label hero-label">01 / THE RELEASE</p>
+      <p className="editorial-label hero-label">01 / O QUARTO</p>
       <div className="hero-cover">
-        <h1 className="hero-title font-display"><span>I'M</span><span>FLEXIN UP'</span></h1>
+        <h1 className="hero-title font-display" tabIndex={0}><span>I'M</span><span className="font-brand rgb-brand" data-text="FLEXIN UP'">FLEXIN UP'</span></h1>
         <div className="hero-artists" aria-label={site.artists}>
           <div className="hero-artist artist-left"><img src={img.inf8m8us.src} srcSet={img.inf8m8us.srcSet} sizes="(max-width: 768px) 70vw, 540px" alt="INF8M8US" width={540} height={540} fetchPriority="high" /><span className="jewel-light" /></div>
           <div className="hero-artist artist-right"><img src={img.khriys.src} srcSet={img.khriys.srcSet} sizes="(max-width: 768px) 70vw, 540px" alt="Khriys" width={540} height={540} fetchPriority="high" /><span className="jewel-light" /></div>

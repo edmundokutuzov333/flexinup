@@ -7,7 +7,7 @@ const PrizeScene = lazy(() => import("./PrizeScene"));
 const rules = [["Segue o Khriys", `Seguir @${site.handles.khriys} no Instagram é obrigatório.`], ["Publica + tag", `Publica o teu vídeo e faz tag @${site.handles.khriys}.`], ["Mais likes ganha", "Ganha quem tiver mais likes no vídeo, só se estiver a seguir o Khriys."]];
 export function Prizes() {
   return <section id="premios" className="editorial-section prize-band"><div className="page-shell">
-    <SectionHeading number="03" label="OS PRÉMIOS" title="O QUE ESTÁ EM JOGO" />
+    <SectionHeading number="03" label="O COFRE" title="O QUE ESTÁ EM JOGO" />
     <div className="prize-grid"><Prize kind="money" label={site.challenge.prizeMoney} fallback={img.money} /><Prize kind="goyard" label={site.challenge.prizeItem} fallback={img.goyard} /></div>
     <div className="prize-rules">{rules.map(([t,d]) => <div key={t}><h3>{t}</h3><p>{d}</p></div>)}<Link to="/regulamento">Regulamento completo →</Link></div>
   </div></section>;
