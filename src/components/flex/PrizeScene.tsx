@@ -18,7 +18,7 @@ export default function PrizeScene({ kind, image }: { kind: "money" | "goyard"; 
   return <Canvas dpr={[1,1.5]} camera={{position:[0,.3,4.4],fov:40}} gl={{antialias:true,alpha:true}}>
     <ambientLight intensity={1.1} /><directionalLight position={[-3,3,4]} intensity={2} color={tokens.gold} /><directionalLight position={[3,1,3]} intensity={.8} color={tokens.bone} />
     <Piece image={image} kind={kind} reduced={reduced} />
-    <mesh rotation-x={-Math.PI/2} position={[0,-1.12,0]}><planeGeometry args={[10,10]} /><MeshReflectorMaterial resolution={128} mixBlur={1} mixStrength={1.8} blur={[100,40]} roughness={.8} depthScale={.4} color={tokens.ink} metalness={.3} mirror={.25} /></mesh>
+    <mesh rotation-x={-Math.PI/2} position={[0,-1.12,0]}><planeGeometry args={[10,10]} /><MeshReflectorMaterial resolution={128} mixBlur={1} mixStrength={1.8} blur={[100,40]} roughness={.8} depthScale={.4} color={tokens.ink} metalness={.3} mirror={.25} transparent opacity={.2} /></mesh>
     <OrbitControls enableZoom={false} enablePan={false} minAzimuthAngle={-.5} maxAzimuthAngle={.5} minPolarAngle={Math.PI/2.4} maxPolarAngle={Math.PI/1.9} />
   </Canvas>;
 }
