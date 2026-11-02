@@ -11,7 +11,7 @@ class AudioEngine {
   master: GainNode | null = null;
   speaker: GainNode | null = null;
   analyser: AnalyserNode | null = null;
-  recDest: MediaStreamAudioDestinationNode;
+  private destination: MediaStreamAudioDestinationNode | null = null;
   muted = false;
   playing = false;
   mode: Mode | null = null;
@@ -24,9 +24,9 @@ class AudioEngine {
   private noise: AudioBuffer | null = null;
   private listeners = new Set<() => void>();
 
-  constructor() {
-    // Created on unlock; the existing recorder reads it only after awaiting unlock.
-    this.recDest = undefined as unknown as MediaStreamAudioDestinationNode;
+  get recDest(): MediaStreamAudioDestinationNode {
+    if (!this.destination) throw new Error("Audio must be unlocked before recording");
+    return this.destination;
   }
 
   subscribe(fn: () => void) {
@@ -45,7 +45,7 @@ class AudioEngine {
       this.speaker = this.ctx.createGain();
       this.analyser = this.ctx.createAnalyser();
       this.analyser.fftSize = 64;
-      this.recDest = this.ctx.createMediaStreamDestination();
+      this.destination = this.ctx.createMediaStreamDestination();
       this.master.connect(this.analyser);
       this.analyser.connect(this.speaker);
       this.speaker.connect(this.ctx.destination);
