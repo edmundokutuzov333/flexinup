@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { audio } from "@/lib/audio-engine";
-import { NightVision, pickMime, timecode } from "@/lib/night-vision";
+import { FlexCam, pickMime, timecode } from "@/lib/night-vision";
 import { buildCaption, site } from "@/config/site";
 import { Glitch } from "./Glitch";
 
@@ -24,7 +24,8 @@ export function Recorder({ onClose }: { onClose: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<HTMLSpanElement>(null);
-  const nv = useRef<NightVision | null>(null);
+  const nv = useRef<FlexCam | null>(null);
+  const beatRef = useRef({ level: 0, pulse: 0 });
   const stream = useRef<MediaStream | null>(null);
   const micStream = useRef<MediaStream | null>(null);
   const micNode = useRef<MediaStreamAudioSourceNode | null>(null);
@@ -46,9 +47,18 @@ export function Recorder({ onClose }: { onClose: () => void }) {
       const t = performance.now() / 1000;
       const rec = phaseRef.current === "recording";
       const elapsed = rec ? (performance.now() - recStart.current) / 1000 : 0;
-      const flash = rec && elapsed > DURATION - 2 && elapsed < DURATION - 1.7 ? 1 - (elapsed - (DURATION - 2)) / 0.3 : 0;
-      const card = rec && elapsed >= DURATION - 1.85;
-      r.render(v, t, facing === "user", { elapsed, recording: rec, card }, flash);
+      const flash = 0;
+      const spectrum = audio.level();
+      let bass = 0;
+      for (let i = 0; i < Math.min(5, spectrum.length); i++) bass += (spectrum[i] ?? 0) / 255;
+      bass /= Math.max(1, Math.min(5, spectrum.length));
+      const previous = beatRef.current;
+      const level = previous.level + (bass - previous.level) * (bass > previous.level ? 0.34 : 0.075);
+      const transient = Math.max(0, bass - previous.level - 0.025);
+      const pulse = Math.max(transient * 5.5, previous.pulse * 0.84);
+      beatRef.current = { level, pulse };
+      const beat = Math.min(1, level * 0.5 + pulse * 0.85);
+      r.render(v, t, facing === "user", flash, beat);
       if (rec) {
         if (progressRef.current) progressRef.current.style.transform = `scaleX(${Math.min(elapsed / DURATION, 1)})`;
         if (timeRef.current) timeRef.current.textContent = timecode(elapsed);
@@ -84,7 +94,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
         await v.play();
         if (!nv.current) {
           await document.fonts?.ready;
-          nv.current = new NightVision(canvasRef.current!);
+          nv.current = new FlexCam(canvasRef.current!);
         }
         setPhase("ready");
       } catch (e) {
@@ -188,6 +198,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
     };
     recorder.current = mr;
     recStart.current = performance.now();
+    beatRef.current = { level: 0, pulse: 0 };
     audio.play("challenge", false);
     mr.start(1000);
     vibrate(80);
