@@ -20,61 +20,62 @@ export const Route = createFileRoute("/admin")({
 });
 
 type Entry = { id: string; handle: string; post_url: string; contact: string | null; status: string; created_at: string };
+const KEY = "flex_admin_code";
 
 function Admin() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [code, setCode] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
-    const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
-    return () => data.subscription.unsubscribe();
-  }, []);
+  useEffect(() => { setCode(sessionStorage.getItem(KEY)); setReady(true); }, []);
   if (!ready) return null;
-  return <main className="mx-auto max-w-5xl px-4 py-10">{session ? <Panel userId={session.user.id} /> : <Login />}</main>;
+  const logout = () => { sessionStorage.removeItem(KEY); setCode(null); };
+  return (
+    <main className="mx-auto max-w-5xl px-4 py-10">
+      {code ? <Panel code={code} onLogout={logout} /> : <Login onOk={(c) => { sessionStorage.setItem(KEY, c); setCode(c); }} />}
+    </main>
+  );
 }
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function Login({ onOk }: { onOk: (c: string) => void }) {
+  const [value, setValue] = useState("");
   const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const login = useServerFn(adminLogin);
   const f = "min-h-12 w-full border border-input bg-graphite px-3 font-mono text-bone";
   return (
     <form
       className="mx-auto mt-20 flex max-w-sm flex-col gap-3"
       onSubmit={async (e) => {
         e.preventDefault();
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) setErr("Credenciais inválidas.");
+        setBusy(true); setErr("");
+        try {
+          const r = await login({ data: { code: value } });
+          if (r.ok) onOk(value); else setErr("Código inválido.");
+        } catch { setErr("Código inválido."); }
+        setBusy(false);
       }}
     >
       <h1 className="font-display text-5xl text-gold-metal">Equipa</h1>
-      <input className={f} type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <input className={f} type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      <input className={f} type="password" placeholder="código de acesso" autoComplete="off" value={value} onChange={(e) => setValue(e.target.value)} required />
       {err && <p className="font-mono text-sm text-rec">{err}</p>}
-      <button className="min-h-12 bg-gold-metal font-mono font-bold uppercase text-primary-foreground">Entrar</button>
+      <button disabled={busy} className="min-h-12 bg-gold-metal font-mono font-bold uppercase text-primary-foreground">{busy ? "..." : "Entrar"}</button>
     </form>
   );
 }
 
-function Panel({ userId }: { userId: string }) {
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [rows, setRows] = useState<Entry[]>([]);
+function Panel({ code, onLogout }: { code: string; onLogout: () => void }) {
+  const [rows, setRows] = useState<Entry[] | null>(null);
   const [filter, setFilter] = useState("todos");
-  const load = async () => {
-    const { data } = await supabase.from("entries").select("id,handle,post_url,contact,status,created_at").order("created_at", { ascending: false });
-    setRows((data as Entry[]) ?? []);
-  };
+  const list = useServerFn(adminListEntries);
+  const update = useServerFn(adminSetStatus);
   useEffect(() => {
-    supabase.rpc("has_role", { _user_id: userId, _role: "admin" }).then(({ data }) => {
-      setIsAdmin(!!data);
-      if (data) void load();
-    });
-  }, [userId]);
-  const setStatus = async (id: string, status: string) => {
-    await supabase.from("entries").update({ status }).eq("id", id);
-    setRows((r) => r.map((x) => (x.id === id ? { ...x, status } : x)));
+    list({ data: { code } }).then((d) => setRows(d as Entry[])).catch(onLogout);
+  }, [code]);
+  const setStatus = async (id: string, status: "validado" | "rejeitado") => {
+    await update({ data: { code, id, status } });
+    setRows((r) => (r ?? []).map((x) => (x.id === id ? { ...x, status } : x)));
   };
-  if (isAdmin === null) return null;
+  const logoutBtn = onLogout;
+  if (rows === null) return null;
   if (!isAdmin)
     return (
       <div className="mt-20 text-center font-mono text-sm">
