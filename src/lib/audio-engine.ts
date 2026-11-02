@@ -128,9 +128,18 @@ class AudioEngine {
     this.emit();
   }
 
+  /** True when the visitor paused the ambience in section 06; videos must not resume it. */
+  userPaused = false;
+
   toggleFull() {
-    if (this.playing) this.stop();
-    else this.play("full");
+    if (this.playing) { this.userPaused = true; this.stop(); }
+    else { this.userPaused = false; this.play("full"); }
+  }
+
+  /** Resume ambience after a video pauses/ends, unless the visitor paused it themselves. */
+  resumeAmbient() {
+    if (this.userPaused || !this.ctx) return;
+    if (!this.playing || this.mode !== "full") this.play("full");
   }
 
   level() {
