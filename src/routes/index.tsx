@@ -42,7 +42,7 @@ function Index() {
   };
 
   return (
-    <main className="relative">
+    <main className="relative editorial-site">
       {overlay && <GateIntro key={overlay} mode={overlay} onDone={() => setOverlay(null)} />}
       <Nav onFilm={film} />
       <Hero onFilm={() => document.getElementById("challenge")?.scrollIntoView()} onListen={() => document.getElementById("ouvir")?.scrollIntoView()} />
