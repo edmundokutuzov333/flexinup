@@ -6,6 +6,22 @@ import { site } from "@/config/site";
 
 export const INTRO_KEY = "fu_intro_seen";
 
+function hasSeenIntro() {
+  try {
+    return localStorage.getItem(INTRO_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function rememberIntro() {
+  try {
+    localStorage.setItem(INTRO_KEY, "1");
+  } catch {
+    // Storage can be unavailable in private browsing; the intro still completes.
+  }
+}
+
 function GateSound() {
   const muted = useSyncExternalStore(
     (cb) => audio.subscribe(cb),
@@ -42,18 +58,25 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
     setLoading(true);
     setError(false);
 
+    let audioReady = true;
     try {
       await audio.unlock();
-      if (localStorage.getItem(INTRO_KEY)) {
-        audio.play("full");
-        onDone();
-      } else {
-        setPlaying(true);
-      }
     } catch {
+      audioReady = false;
       setError(true);
-      setLoading(false);
     }
+
+    if (hasSeenIntro()) {
+      if (audioReady) {
+        void audio.prepare("full").then(() => audio.play("full")).catch(() => {});
+      }
+      onDone();
+      return;
+    }
+
+    // Sound is an enhancement, not a gate: the visitor can always enter.
+    setPlaying(true);
+    setLoading(false);
   };
 
   return playing ? (
@@ -70,7 +93,7 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
         <GateSound />
       </header>
 
-      <main className="entry-main">
+      <div className="entry-main">
         <section className="entry-copy">
           <p className="entry-kicker"><span>01</span> THE FLEXIN CAMPAIGN</p>
 
@@ -157,11 +180,18 @@ function Intro({ onDone }: { onDone: () => void }) {
   const [cut, setCut] = useState(0);
   const done = useRef(false);
 
-  const finish = () => {
+  const finish = async () => {
     if (done.current) return;
     done.current = true;
-    localStorage.setItem(INTRO_KEY, "1");
-    audio.play("full");
+    rememberIntro();
+
+    try {
+      await audio.prepare("full");
+      audio.play("full");
+    } catch {
+      // Continue into the site even when audio is unavailable.
+    }
+
     onDone();
   };
 
