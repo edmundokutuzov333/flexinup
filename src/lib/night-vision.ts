@@ -60,7 +60,7 @@ export class NightVision {
   private prog: WebGLProgram;
   private vidTex: WebGLTexture;
   private ovTex: WebGLTexture;
-  private u: Record<string, WebGLUniformLocation | null> = {};
+  private u = {} as Record<"uVid" | "uOv" | "uScale" | "uOff" | "uT" | "uQ" | "uMirror" | "uFlash", WebGLUniformLocation | null>;
   overlay: HTMLCanvasElement;
   private octx: CanvasRenderingContext2D;
   quality = 1;
@@ -93,7 +93,7 @@ export class NightVision {
     const loc = gl.getAttribLocation(p, "a");
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    for (const n of ["uVid", "uOv", "uScale", "uOff", "uT", "uQ", "uMirror", "uFlash"]) this.u[n] = gl.getUniformLocation(p, n);
+    for (const n of ["uVid", "uOv", "uScale", "uOff", "uT", "uQ", "uMirror", "uFlash"] as const) this.u[n] = gl.getUniformLocation(p, n);
     const mk = () => {
       const t = gl.createTexture()!;
       gl.bindTexture(gl.TEXTURE_2D, t);
