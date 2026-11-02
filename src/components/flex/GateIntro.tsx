@@ -67,9 +67,7 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
     }
 
     if (hasSeenIntro()) {
-      if (audioReady) {
-        void audio.prepare("full").then(() => audio.play("full")).catch(() => {});
-      }
+      if (audioReady) audio.play("full");
       onDone();
       return;
     }
@@ -186,7 +184,6 @@ function Intro({ onDone }: { onDone: () => void }) {
     rememberIntro();
 
     try {
-      await audio.prepare("full");
       audio.play("full");
     } catch {
       // Continue into the site even when audio is unavailable.
