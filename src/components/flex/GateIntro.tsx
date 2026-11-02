@@ -73,7 +73,7 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
         <div className="poster-gallery" aria-label="Khriys, INF8M8US e símbolos do flex">
           <figure className="poster-frame poster-frame--khriys">
             <img src={img.khriys.src} alt="Khriys" fetchPriority="high" />
-            <figcaption>KHRYIS <span>01</span></figcaption>
+            <figcaption>KHRIYS <span>01</span></figcaption>
           </figure>
 
           <figure className="poster-frame poster-frame--inf8">
