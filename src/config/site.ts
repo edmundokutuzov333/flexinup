@@ -6,6 +6,7 @@
 import entryAudio from "@/assets/flexin-entry.mp3.asset.json";
 import instrumentalAudio from "@/assets/flexin-instrumental.mp3.asset.json";
 import officialAudio from "@/assets/flexin-official.mp3.asset.json";
+import backstageVideo from "@/assets/flexin-backstage.mp4.asset.json";
 
 export const site = {
   title: "I'M FLEXIN UP'",
@@ -51,6 +52,9 @@ export const site = {
     prizeMoney: "5.000 MT",
     prizeItem: "Bolsa Goyard original",
   },
+
+  /** Vídeo destacado dos bastidores. */
+  backstageFeature: { src: backstageVideo.url, caption: "BASTIDORES · I'M FLEXIN UP' · TAKE 01" },
 
   /** Vídeos de bastidores. src vazio = placeholder elegante. */
   backstage: [

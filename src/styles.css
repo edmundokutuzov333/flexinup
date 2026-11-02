@@ -397,3 +397,15 @@ footer::before { content: "PARENTAL\A ADVISORY\A EXPLICIT CONTENT"; white-space:
 footer::after { content: "PRODUCED BY INF8M8US · VOCALS BY KHRIYS · MAPUTO 2026 · FX-001"; display: block; padding: 18px 20px 96px; font: 9px var(--font-mono); letter-spacing: .14em; color: var(--bone-dim); border-top: 1px dashed var(--line); background: repeating-linear-gradient(90deg, var(--bone) 0 2px, transparent 2px 4px, var(--bone) 4px 5px, transparent 5px 9px) right 20px top 18px / 90px 34px no-repeat; }
 .editorial-button:active, .gate-enter:active { filter: invert(1); transition: none; }
 @media (prefers-reduced-motion: reduce) { .editorial-button:active { filter: none; } }
+/* backstage feature */
+.bs-feature { position: relative; margin: 48px 4px 64px; }
+.bs-frame { position: relative; border: 10px solid var(--bone); border-bottom-width: 44px; background: var(--ink); transform: rotate(-1deg); }
+.bs-frame::before { content: ""; position: absolute; top: -16px; left: 38%; width: 110px; height: 28px; background: rgb(228 223 212 / .55); transform: rotate(-5deg); z-index: 3; }
+.bs-frame video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; filter: grayscale(.4) contrast(1.15); }
+.bs-sign { position: absolute; right: -4px; bottom: 14px; z-index: 4; font-family: var(--font-script); color: var(--opium); font-size: clamp(38px, 11vw, 96px); transform: rotate(-9deg); pointer-events: none; line-height: 1; text-shadow: 0 2px 0 rgb(0 0 0 / .5); }
+.bs-doodle { position: absolute; z-index: 4; font-family: var(--font-display); color: var(--bone); pointer-events: none; letter-spacing: .04em; }
+.d1 { top: -26px; left: -2px; font-size: 22px; color: var(--opium); transform: rotate(-12deg); }
+.d2 { top: -22px; right: 6px; font: 14px var(--font-mono); border: 2px solid var(--bone); border-radius: 50%; padding: 6px 12px; transform: rotate(8deg); }
+.d3 { bottom: -34px; left: 6px; font-size: 18px; transform: rotate(4deg); text-decoration: line-through var(--opium) 3px; }
+.bs-feature .clip-caption { margin-top: 48px; }
+@media (min-width:768px){ .bs-feature{ margin: 64px 0 88px; } .d1{font-size:34px;left:-24px} .d3{font-size:26px} }
