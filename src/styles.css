@@ -383,3 +383,4 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-i
 .artist-left { margin-right: -8% !important; }
 .artist-right { margin-left: -8% !important; }
 @media (min-width:768px){ .hero-cover{height:720px !important;} .hero-artists{inset:260px 10% 0 !important;} .hero-artist{flex-basis:38% !important;} }
+.hero-cover{height:440px !important}.hero-artists{inset:120px -10px 0 !important}@media (min-width:768px){.hero-cover{height:720px !important}.hero-artists{inset:260px 10% 0 !important}}
