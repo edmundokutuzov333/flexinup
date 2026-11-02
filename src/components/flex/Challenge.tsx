@@ -17,11 +17,11 @@ export function Challenge({ onFilm }: { onFilm: () => void }) {
           <p className="privacy-note">O vídeo fica no teu telemóvel. Nunca nos nossos servidores.</p>
           <div className="challenge-dates">{([["Início", c.startDate], ["Fecho", c.endDate], ["Vencedor", c.announceDate]] as const).map(([label,date]) => <div key={label}><p className="editorial-label">{label}</p><p>{formatDatePt(date)}</p></div>)}</div>
         </div>
-        <div className="filter-preview" aria-label="Preview do filtro night vision">
+        <div className="filter-preview" aria-label="Preview do filtro DV camera">
           <img src={img.khriys.src} alt="Khriys com preview night vision" width={540} height={540} loading="lazy" />
-          <div className="preview-top"><span>NV / 01</span><span>00:30</span></div>
+          <div className="preview-top"><span>DV / 01</span><span>00:30</span></div>
           <div className="preview-safe" aria-hidden />
-          <p className="preview-bottom">I'M FLEXIN UP'<br /><span>OFFICIAL FILTER</span></p>
+          <p className="preview-bottom">I'M FLEXIN UP'<br /><span>OFFICIAL DV FILTER</span></p>
         </div>
       </div>
     </section>
