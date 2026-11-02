@@ -230,11 +230,38 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires Node.js 24.x and Bun. The repository uses the committed `bun.lock` lockfile.
 
 ```sh
 git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+cd flexinup
+bun install --frozen-lockfile
+bun run dev
 ```
+
+Production build:
+
+```sh
+bun run build
+```
+
+## Vercel production
+
+The production deployment is connected to this GitHub repository and tracks `main`.
+
+- Framework preset: `tanstack-start-lovable`
+- Root directory: repository root
+- Node.js runtime: `24.x`
+- Install command: `bun install --frozen-lockfile`
+- Build command: `bun run build`
+
+The Vercel project requires these environment variables for the Supabase-backed ranking, submissions and team panel:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_CODE`
+
+Keep secret keys encrypted in Vercel. Never commit their values to this repository.
