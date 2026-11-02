@@ -372,3 +372,14 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-i
 .prize-band { background: transparent !important; }
 ::selection { background: var(--opium); color: var(--bone); }
 @media (prefers-reduced-motion: reduce) { .gate-enter { animation: none; } }
+:root { --font-brand: "Rubik Dirt", sans-serif; }
+.font-brand, .nav-brand, .section-heading h2 { font-family: var(--font-display) !important; }
+.hero-cover { height: 520px !important; }
+.hero-title { z-index: 6 !important; }
+.hero-artists { inset: 190px -10px 0 !important; z-index: 2 !important; }
+.hero-artist { flex-basis: 52% !important; padding: 7px 7px 34px; }
+.hero-artist::after { content: "INF8M8US"; font-size: 24px; }
+.artist-right::after { content: "KHRIYS"; }
+.artist-left { margin-right: -8% !important; }
+.artist-right { margin-left: -8% !important; }
+@media (min-width:768px){ .hero-cover{height:720px !important;} .hero-artists{inset:260px 10% 0 !important;} .hero-artist{flex-basis:38% !important;} }
