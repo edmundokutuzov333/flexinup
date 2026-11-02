@@ -3,6 +3,10 @@
  * Preenche aqui o áudio, vídeos de bastidores, handles, links e datas.
  * Tudo o que estiver vazio ("") usa um placeholder automático.
  */
+import entryAudio from "@/assets/flexin-entry.mp3.asset.json";
+import instrumentalAudio from "@/assets/flexin-instrumental.mp3.asset.json";
+import officialAudio from "@/assets/flexin-official.mp3.asset.json";
+
 export const site = {
   title: "I'M FLEXIN UP'",
   artists: "Khriys x INF8M8US",
@@ -25,11 +29,16 @@ export const site = {
 
   audio: {
     /** MP3/AAC da faixa completa (ex.: "/audio/flexin-up.mp3"). Vazio = beat gerado. */
-    trackUrl: "",
+    trackUrl: officialAudio.url,
+    /** Cortado: apenas na entrada. Instrumental: ambiente após a entrada. */
+    introUrl: entryAudio.url,
+    ambienceUrl: instrumentalAudio.url,
+    ambienceVolume: 0.22,
+    introSeconds: 7.992,
     /** Trecho de 30s já cortado para o challenge. Vazio = usa trackUrl a partir de challengeOffset. */
     challengeClipUrl: "",
     /** Segundo onde começa o refrão (se só existir trackUrl). */
-    challengeOffset: 45,
+    challengeOffset: 0,
     /** BPM do placeholder gerado. */
     bpm: 140,
   },
