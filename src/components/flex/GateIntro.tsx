@@ -16,7 +16,7 @@ function GateSound() {
   return (
     <Button
       variant="ghost"
-      className="sound-button gate-sound"
+      className="sound-button gate-sound poster-sound"
       aria-label={muted ? "Ligar som da entrada" : "Desligar som da entrada"}
       onClick={() => audio.setMuted(!muted)}
     >
@@ -59,31 +59,67 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
   return playing ? (
     <Intro onDone={onDone} />
   ) : (
-    <div className="editorial-gate simple-gate" aria-label="Entrada de I'M FLEXIN UP'" aria-busy={loading}>
-      <div className="simple-gate-art" aria-hidden="true">
-        <img className="simple-gate-artist simple-gate-artist--left" src={img.khriys.src} alt="" />
-        <img className="simple-gate-artist simple-gate-artist--right" src={img.inf8m8us.src} alt="" />
-      </div>
-
+    <div className="editorial-gate flexin-poster-gate" aria-label="Entrada de I'M FLEXIN UP'" aria-busy={loading}>
+      <div className="poster-paper-grain" aria-hidden="true" />
       <GateSound />
 
-      <div className="simple-gate-main">
-        <p className="simple-gate-kicker">A NOVA FAIXA DE KHRIYS X INF8M8US</p>
-        <h1 className="simple-gate-title font-brand">
-          <span>I'M</span>
-          <span>FLEXIN</span>
-          <span className="simple-gate-title-up">UP'</span>
-        </h1>
-        <p className="simple-gate-signature">Khriys <i>×</i> INF8M8US</p>
+      <div className="flexin-poster-sheet">
+        <header className="poster-heading">
+          <h1 className="poster-main-title font-display" data-text="I'M FLEXIN UP'">
+            I'M FLEXIN UP'
+          </h1>
+        </header>
 
-        <Button variant="editorial" onClick={enter} disabled={loading} className="gate-enter simple-gate-enter">
-          {loading ? "A ABRIR..." : "TOCA PARA ENTRAR"}
-          <span aria-hidden="true">↗</span>
-        </Button>
+        <div className="poster-gallery" aria-label="Khriys, INF8M8US e símbolos do flex">
+          <figure className="poster-frame poster-frame--khriys">
+            <img src={img.khriys.src} alt="Khriys" fetchPriority="high" />
+            <figcaption>KHRYIS <span>01</span></figcaption>
+          </figure>
 
-        <p className="simple-gate-note" role={error ? "status" : undefined}>
-          {error ? "O SOM NÃO ARRANCOU. TENTA OUTRA VEZ." : "SOM LIGADO. LUZES APAGADAS."}
-        </p>
+          <figure className="poster-frame poster-frame--inf8">
+            <img src={img.inf8m8us.src} alt="INF8M8US" fetchPriority="high" />
+            <figcaption>INF8M8US <span>02</span></figcaption>
+          </figure>
+
+          <figure className="poster-frame poster-frame--goyard">
+            <img src={img.goyard} alt="Bolsa Goyard" />
+            <figcaption>THE FLEX <span>03</span></figcaption>
+          </figure>
+
+          <div className="poster-snapshot poster-snapshot--cash" aria-hidden="true">
+            <img src={img.money} alt="" />
+            <span>MT / CASH</span>
+          </div>
+
+          <div className="poster-snapshot poster-snapshot--artist" aria-hidden="true">
+            <img src={img.khriys.src} alt="" />
+            <span>KHRIYS · INF8M8US</span>
+          </div>
+
+          <span className="poster-cross poster-cross--one" aria-hidden="true">✣</span>
+          <span className="poster-cross poster-cross--two" aria-hidden="true">✣</span>
+        </div>
+
+        <div className="poster-bottom-copy">
+          <h2 className="poster-bottom-title font-display" data-text="SHOW YOUR FLEX">SHOW YOUR FLEX</h2>
+          <p className="poster-bottom-line">EVERYTHING OR NOTHING</p>
+          <p className="poster-bottom-at">AT ALL</p>
+        </div>
+
+        <div className="poster-enter-wrap">
+          <Button
+            variant="editorial"
+            onClick={enter}
+            disabled={loading}
+            className="gate-enter poster-enter"
+          >
+            {loading ? "A ABRIR..." : "TOCA PARA ENTRAR"}
+            <span aria-hidden="true">↗</span>
+          </Button>
+          <p className="poster-enter-note" role={error ? "status" : undefined}>
+            {error ? "O SOM NÃO ARRANCOU. TENTA OUTRA VEZ." : "KHRIYS × INF8M8US"}
+          </p>
+        </div>
       </div>
     </div>
   );
