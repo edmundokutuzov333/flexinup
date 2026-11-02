@@ -1,6 +1,6 @@
 export function Glitch({ text, className = "", active = false, as: Tag = "span" }: { text: string; className?: string; active?: boolean; as?: "span" | "h1" | "h2" }) {
   return (
-    <Tag data-text={text} className={`glitch ${active ? "is-glitching" : ""} ${className}`}>
+    <Tag data-text={text} className={`${className}`}>
       {text}
     </Tag>
   );

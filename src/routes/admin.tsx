@@ -9,6 +9,10 @@ export const Route = createFileRoute("/admin")({
     meta: [
       { title: "Equipa — FLEXIN UP'" },
       { name: "description", content: "Painel interno da equipa." },
+      { property: "og:title", content: "Equipa — FLEXIN UP'" },
+      { property: "og:description", content: "Painel interno da equipa Khriys x INF8M8US." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

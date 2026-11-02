@@ -4,7 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { submitEntry } from "@/lib/entries.functions";
 import { entrySchema } from "@/lib/entries-rules";
-import { Glitch, Star4 } from "./Glitch";
+import { SectionHeading } from "./SectionHeading";
+import { Button } from "@/components/ui/button";
 
 export function useEntries() {
   return useQuery({
@@ -50,38 +51,35 @@ export function Submit() {
     }
   };
 
-  const field = "min-h-14 w-full border border-input bg-graphite px-4 font-mono text-base text-bone placeholder:text-muted-foreground focus:border-gold focus:outline-none";
+  const field = "editorial-input";
 
   return (
-    <section id="ranking" className="px-4 py-24">
-      <div className="mx-auto max-w-xl">
-        <Glitch as="h2" text="ENTRA NO RANKING" className="block font-display text-6xl leading-[0.85] text-gold-metal md:text-8xl" />
-        <p className="mt-3 font-mono text-sm text-bone/80">
-          <span className="text-nv">●</span> {data?.count ?? "—"} pessoas já entraram.
-        </p>
+    <section id="ranking" className="editorial-section page-shell">
+      <div className="ranking-layout">
+        <div><SectionHeading number="04" label="O TEU NOME AQUI" title="ENTRA NO RANKING" />
+        <p className="ranking-count">
+          {data?.count ?? "—"} pessoas já entraram.
+        </p></div>
 
         {state === "done" ? (
-          <div className="relative mt-8 overflow-hidden border-2 border-gold p-8 text-center shadow-[var(--shadow-gold)]">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <Star4 key={i} className="absolute h-5 w-5 text-gold-glow" style={{ left: `${(i * 23) % 95}%`, top: `${(i * 41) % 90}%`, animation: `twinkle 1.2s steps(5) ${i * 0.12}s infinite` }} />
-            ))}
-            <p className="font-display text-5xl text-gold-metal">Estás dentro.</p>
+          <div className="relative mt-8 overflow-hidden border border-border bg-card p-6">
+            <p className="font-display text-5xl text-bone">Estás dentro.</p>
             <p className="mt-3 font-mono text-sm text-bone">A equipa valida na data de fecho. Mantém o post público e segue o Khriys.</p>
-            <button onClick={() => { setForm({ handle: "", postUrl: "", contact: "", website: "" }); setState("idle"); }} className="mt-5 min-h-12 font-mono text-xs uppercase text-gold underline">
+            <Button variant="editorialOutline" onClick={() => { setForm({ handle: "", postUrl: "", contact: "", website: "" }); setState("idle"); }} className="mt-5 min-h-12 font-mono text-xs uppercase text-gold underline">
               Inscrever outro vídeo
-            </button>
+            </Button>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-3" noValidate>
-            <label className="font-mono text-xs uppercase text-muted-foreground">
+          <form onSubmit={onSubmit} className="flex flex-col gap-6" noValidate>
+            <label className="editorial-label">
               @ do Instagram
               <input className={field + " mt-1"} placeholder="@khriys_say_chris" autoCapitalize="none" autoComplete="off" value={form.handle} onChange={(e) => setForm({ ...form, handle: e.target.value })} maxLength={31} required />
             </label>
-            <label className="font-mono text-xs uppercase text-muted-foreground">
+            <label className="editorial-label">
               Link da publicação
               <input className={field + " mt-1"} type="url" inputMode="url" placeholder="https://www.instagram.com/reel/…" value={form.postUrl} onChange={(e) => setForm({ ...form, postUrl: e.target.value })} maxLength={300} required />
             </label>
-            <label className="font-mono text-xs uppercase text-muted-foreground">
+            <label className="editorial-label">
               Contacto (WhatsApp ou email)
               <input className={field + " mt-1"} placeholder="+258 84 000 0000" value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} maxLength={120} />
             </label>
@@ -89,10 +87,10 @@ export function Submit() {
             <div aria-hidden className="hidden">
               <input tabIndex={-1} autoComplete="off" name="website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} />
             </div>
-            {error && <p role="alert" className="font-mono text-sm text-rec">{error}</p>}
-            <button disabled={state === "sending"} className="mt-2 min-h-16 bg-gold-metal font-display text-4xl text-primary-foreground shadow-[var(--shadow-gold)] disabled:opacity-60">
+            {error && <p role="alert" className="font-mono text-sm text-bone">{error}</p>}
+            <Button variant="editorial" type="submit" disabled={state === "sending"} className="mt-6">
               {state === "sending" ? "A ENVIAR…" : "ENTRAR →"}
-            </button>
+            </Button>
             <p className="font-mono text-[11px] text-muted-foreground">Só guardamos o @, o link e o contacto. O vídeo fica no Instagram.</p>
           </form>
         )}
@@ -102,7 +100,7 @@ export function Submit() {
         <div className="mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-2 md:grid-cols-4">
           {data.list.map((e) => (
             <a key={e.post_url} href={e.post_url} target="_blank" rel="noopener noreferrer nofollow" className="group flex min-h-24 flex-col justify-between border border-border bg-graphite p-3 hover:border-gold">
-              <span className="font-mono text-[10px] text-nv">● REC</span>
+              <span className="editorial-label">PUBLICAÇÃO</span>
               <span className="truncate font-mono text-sm text-bone group-hover:text-gold">@{e.handle}</span>
               <span className="font-mono text-[10px] uppercase text-muted-foreground">Ver post →</span>
             </a>

@@ -15,3 +15,4 @@
 - The night-vision filter is one WebGL2 fragment pass (`src/lib/night-vision.ts`) with the HUD drawn to a 2D canvas uploaded as a texture only when it changes — keep per-pixel work out of JS.
 - Entries are inserted only via the `submitEntry` server function (honeypot + hashed-IP rate limit, admin client); public reads go through the `public_entries`/`entries_count` SECURITY DEFINER RPCs; team access is `user_roles` admin + RLS on `/admin`.
 - 3D prizes are lazy-loaded R3F scenes rendering the PNGs as lit stacked planes, mounted only when near the viewport.
+- Public editorial presentation uses global semantic tokens and a shared SectionHeading; the recorder and data functions remain isolated so visual revisions cannot alter capture or entry behavior.
