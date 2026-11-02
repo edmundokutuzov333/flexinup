@@ -61,9 +61,9 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
   ) : (
     <div className="editorial-gate flexin-poster-gate" aria-label="Entrada de I'M FLEXIN UP'" aria-busy={loading}>
       <div className="poster-paper-grain" aria-hidden="true" />
-      <GateSound />
 
       <div className="flexin-poster-sheet">
+        <GateSound />
         <header className="poster-heading">
           <h1 className="poster-main-title font-display" data-text="I'M FLEXIN UP'">
             I'M FLEXIN UP'
@@ -72,27 +72,41 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
 
         <div className="poster-gallery" aria-label="Khriys, INF8M8US e símbolos do flex">
           <figure className="poster-frame poster-frame--khriys">
-            <img src={img.khriys.src} alt="Khriys" fetchPriority="high" />
+            <img
+              src={img.khriys.src}
+              srcSet={img.khriys.srcSet}
+              sizes="(max-width: 520px) 30vw, 220px"
+              alt="Khriys"
+              fetchPriority="high"
+              decoding="async"
+            />
             <figcaption>KHRIYS <span>01</span></figcaption>
           </figure>
 
           <figure className="poster-frame poster-frame--inf8">
-            <img src={img.inf8m8us.src} alt="INF8M8US" fetchPriority="high" />
+            <img
+              src={img.inf8m8us.src}
+              srcSet={img.inf8m8us.srcSet}
+              sizes="(max-width: 520px) 30vw, 220px"
+              alt="INF8M8US"
+              fetchPriority="high"
+              decoding="async"
+            />
             <figcaption>INF8M8US <span>02</span></figcaption>
           </figure>
 
           <figure className="poster-frame poster-frame--goyard">
-            <img src={img.goyard} alt="Bolsa Goyard" />
+            <img src={img.goyard} alt="Bolsa Goyard" loading="eager" decoding="async" />
             <figcaption>THE FLEX <span>03</span></figcaption>
           </figure>
 
           <div className="poster-snapshot poster-snapshot--cash" aria-hidden="true">
-            <img src={img.money} alt="" />
+            <img src={img.money} alt="" loading="eager" decoding="async" />
             <span>MT / CASH</span>
           </div>
 
           <div className="poster-snapshot poster-snapshot--artist" aria-hidden="true">
-            <img src={img.khriys.src} alt="" />
+            <img src={img.khriys.src} srcSet={img.khriys.srcSet} sizes="(max-width: 520px) 28vw, 190px" alt="" decoding="async" />
             <span>KHRIYS · INF8M8US</span>
           </div>
 
