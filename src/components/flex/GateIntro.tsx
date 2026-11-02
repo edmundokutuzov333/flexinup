@@ -16,7 +16,7 @@ function GateSound() {
   return (
     <Button
       variant="ghost"
-      className="sound-button gate-sound poster-sound"
+      className="sound-button gate-sound entry-sound"
       aria-label={muted ? "Ligar som da entrada" : "Desligar som da entrada"}
       onClick={() => audio.setMuted(!muted)}
     >
@@ -59,82 +59,96 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
   return playing ? (
     <Intro onDone={onDone} />
   ) : (
-    <div className="editorial-gate flexin-poster-gate" aria-label="Entrada de I'M FLEXIN UP'" aria-busy={loading}>
-      <div className="poster-paper-grain" aria-hidden="true" />
+    <div className="editorial-gate flexin-entry-gate" aria-label="I'M FLEXIN UP' por Khriys e INF8M8US" aria-busy={loading}>
+      <div className="entry-atmosphere" aria-hidden="true" />
+      <div className="entry-grain" aria-hidden="true" />
 
-      <div className="flexin-poster-sheet">
+      <header className="entry-header">
+        <span className="entry-edition">FU <b>001</b></span>
+        <span className="entry-header-title">KHRIYS <i>×</i> INF8M8US</span>
+        <span className="entry-header-type">THE NEW SINGLE</span>
         <GateSound />
-        <header className="poster-heading">
-          <h1 className="poster-main-title font-display" data-text="I'M FLEXIN UP'">
-            I'M FLEXIN UP'
-          </h1>
-        </header>
+      </header>
 
-        <div className="poster-gallery" aria-label="Khriys, INF8M8US e símbolos do flex">
-          <figure className="poster-frame poster-frame--khriys">
+      <main className="entry-main">
+        <section className="entry-copy">
+          <p className="entry-kicker"><span>01</span> THE FLEXIN CAMPAIGN</p>
+
+          <h1 className="entry-headline font-display">
+            <span className="entry-headline-im">I'M</span>
+            <span className="entry-headline-flex">FLEXIN</span>
+            <span className="entry-headline-up">UP<span className="entry-apostrophe">'</span></span>
+          </h1>
+
+          <p className="entry-artists">KHRIYS <i>×</i> INF8M8US</p>
+          <div className="entry-rule" aria-hidden="true"><span /></div>
+          <p className="entry-statement">NO POSE.<br />ALL PRESENCE.</p>
+          <p className="entry-listen">OUÇA JÁ EM <strong>WWW.FLEXINUP.SITE</strong></p>
+        </section>
+
+        <section className="entry-visual" aria-label="Retratos de Khriys e INF8M8US e detalhes da campanha">
+          <span className="entry-ghost-word" aria-hidden="true">UP'</span>
+          <span className="entry-red-slab" aria-hidden="true" />
+
+          <figure className="entry-photo entry-photo-main">
             <img
               src={img.khriys.src}
               srcSet={img.khriys.srcSet}
-              sizes="(max-width: 520px) 30vw, 220px"
+              sizes="(max-width: 700px) 62vw, 38vw"
               alt="Khriys"
               fetchPriority="high"
               decoding="async"
             />
-            <figcaption>KHRIYS <span>01</span></figcaption>
+            <figcaption><span>KHRIYS</span><b>01 / ARTIST</b></figcaption>
           </figure>
 
-          <figure className="poster-frame poster-frame--inf8">
+          <figure className="entry-photo entry-photo-second">
             <img
               src={img.inf8m8us.src}
               srcSet={img.inf8m8us.srcSet}
-              sizes="(max-width: 520px) 30vw, 220px"
+              sizes="(max-width: 700px) 44vw, 28vw"
               alt="INF8M8US"
               fetchPriority="high"
               decoding="async"
             />
-            <figcaption>INF8M8US <span>02</span></figcaption>
+            <figcaption><span>INF8M8US</span><b>02 / ARTIST</b></figcaption>
           </figure>
 
-          <figure className="poster-frame poster-frame--goyard">
+          <figure className="entry-object">
             <img src={img.goyard} alt="Bolsa Goyard" loading="eager" decoding="async" />
-            <figcaption>THE FLEX <span>03</span></figcaption>
+            <figcaption>THE FLEX / 03</figcaption>
           </figure>
 
-          <div className="poster-snapshot poster-snapshot--cash" aria-hidden="true">
+          <div className="entry-cash" aria-hidden="true">
             <img src={img.money} alt="" loading="eager" decoding="async" />
-            <span>MT / CASH</span>
+            <span>NO LIMITS</span>
           </div>
 
-          <div className="poster-snapshot poster-snapshot--artist" aria-hidden="true">
-            <img src={img.khriys.src} srcSet={img.khriys.srcSet} sizes="(max-width: 520px) 28vw, 190px" alt="" decoding="async" />
-            <span>KHRIYS · INF8M8US</span>
-          </div>
+          <span className="entry-side-note" aria-hidden="true">MAPUTO · MMXXVI</span>
+          <span className="entry-hand-note" aria-hidden="true">this is how we flex</span>
+        </section>
+      </main>
 
-          <span className="poster-cross poster-cross--one" aria-hidden="true">✣</span>
-          <span className="poster-cross poster-cross--two" aria-hidden="true">✣</span>
+      <footer className="entry-footer">
+        <div className="entry-footer-copy">
+          <span>KHRIYS × INF8M8US</span>
+          <span>EVERYTHING OR NOTHING AT ALL</span>
         </div>
 
-        <div className="poster-bottom-copy">
-          <h2 className="poster-bottom-title font-display" data-text="SHOW YOUR FLEX">SHOW YOUR FLEX</h2>
-          <p className="poster-bottom-line">EVERYTHING OR NOTHING</p>
-          <p className="poster-bottom-at">AT ALL</p>
-        </div>
+        <Button
+          variant="editorial"
+          onClick={enter}
+          disabled={loading}
+          className="gate-enter entry-enter"
+        >
+          {loading ? "A ABRIR..." : "TOCA PARA ENTRAR"}
+          <span aria-hidden="true">↗</span>
+        </Button>
 
-        <div className="poster-enter-wrap">
-          <Button
-            variant="editorial"
-            onClick={enter}
-            disabled={loading}
-            className="gate-enter poster-enter"
-          >
-            {loading ? "A ABRIR..." : "TOCA PARA ENTRAR"}
-            <span aria-hidden="true">↗</span>
-          </Button>
-          <p className="poster-enter-note" role={error ? "status" : undefined}>
-            {error ? "O SOM NÃO ARRANCOU. TENTA OUTRA VEZ." : "KHRIYS × INF8M8US"}
-          </p>
-        </div>
-      </div>
+        <p className="entry-error" role={error ? "status" : undefined}>
+          {error ? "O SOM NÃO ARRANCOU. TENTA OUTRA VEZ." : ""}
+        </p>
+      </footer>
     </div>
   );
 }
