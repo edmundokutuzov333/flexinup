@@ -115,6 +115,7 @@ export class FlexCam {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.uniform1i(this.u.uVid, 0);
     gl.uniform1i(this.u.uOv, 1);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     this.ovTex=gl.createTexture()!;
     gl.bindTexture(gl.TEXTURE_2D,this.ovTex);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
@@ -128,7 +129,6 @@ export class FlexCam {
     gl.bindTexture(gl.TEXTURE_2D,this.ovTex);
     gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,this.overlay);
     gl.activeTexture(gl.TEXTURE0);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
   }
 
   render(video: HTMLVideoElement, t: number, mirror: boolean, flash: number, beat: number) {
