@@ -12,6 +12,10 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
   const [playing, setPlaying] = useState(mode === "intro");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
   const enter = async () => {
     setLoading(true);
     setError(false);
