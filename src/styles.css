@@ -265,19 +265,9 @@
 .hero-label { color: var(--opium); }
 .chapter-label { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .chapter-name { color: var(--bone); font-size: 24px; line-height: 1.2; }
-.os-gate { text-align: left; }
-.gate-system { width: min(100% - 48px, 480px); }
-.os-gate .os-wordmark { color: var(--bone); font-size: 54px; line-height: 1; margin-bottom: 16px; }
-.boot-terminal { border-block: 1px solid var(--line); margin-block: 40px; padding-block: 24px; color: var(--bone-dim); font-size: 11px; line-height: 2.4; }
-.boot-terminal p:last-child { color: var(--opium); }
-.os-gate .gate-enter { width: 100%; animation: none; }
-.os-gate .gate-motto { margin-top: 24px; font-size: 9px; }
-.intro-terminal { position: absolute; top: 40px; left: 24px; right: 24px; z-index: 3; line-height: 2.2; }
-.intro-terminal p:last-child { color: var(--opium); }
 .gate-sound { position: absolute; top: 20px; right: 20px; z-index: 6; }
 .intro-trailer { position: absolute; inset: 15% -12% 0; display: flex; align-items: center; justify-content: center; }
 .intro-trailer img { width: 100%; height: 100%; object-fit: contain; filter: var(--hero-duotone); mask-image: linear-gradient(var(--ink) 60%, transparent); }
-.os-intro > .intro-brand { color: var(--bone); z-index: 2; font-size: 96px; text-shadow: var(--rgb-shadow); animation: brand-beat 428.57ms steps(2) infinite; }
 .intro-flash, .chapter-flash { position: fixed; inset: 0; background: var(--bone); pointer-events: none; opacity: 0; }
 .intro-flash { z-index: 5; animation: os-cut 100ms steps(1) 1; }
 .system-effects { pointer-events: none; position: fixed; inset: 0; z-index: 65; --signal: .15; }
@@ -291,7 +281,6 @@
   .hero-title span:last-child { font-size: 144px; }
   .hero-artists { top: 220px; }
   .hero-cover { height: 710px; }
-  .os-gate .os-wordmark { font-size: 80px; }
   .os-intro > .intro-brand { font-size: 176px; }
   .intro-trailer { inset: 8% 10% 0; }
   .system-telemetry, .system-signal { bottom: 24px; }
@@ -663,6 +652,7 @@ footer::after { content: "PRODUCED BY INF8M8US · VOCALS BY KHRIYS · MAPUTO 202
   box-shadow: 0 8px 34px rgb(0 0 0 / .55), 0 0 32px rgb(198 147 68 / .14);
   font: 700 10px/1 var(--font-mono) !important;
   letter-spacing: .2em;
+  animation: none;
   transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
 }
 .altar-enter::before {
