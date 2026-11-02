@@ -43,8 +43,13 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
     if (loading) return;
     setLoading(true);
     setError(false);
+    const startedAt = performance.now();
     try {
       await audio.unlock();
+      const sweepTimeLeft = 520 - (performance.now() - startedAt);
+      if (sweepTimeLeft > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, sweepTimeLeft));
+      }
       if (localStorage.getItem(INTRO_KEY)) {
         audio.play("full");
         onDone();
