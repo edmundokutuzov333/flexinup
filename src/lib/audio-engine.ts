@@ -16,7 +16,7 @@ class AudioEngine {
   playing = false;
   mode: Mode | null = null;
   private buffers = new Map<string, AudioBuffer>();
-  private loading: Promise<void> | null = null;
+  private pendingBuffers = new Map<string, Promise<AudioBuffer | null>>();
   private src: AudioBufferSourceNode | null = null;
   private timer: number | null = null;
   private nextBeat = 0;
@@ -54,30 +54,49 @@ class AudioEngine {
       this.noise = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
       const d = this.noise.getChannelData(0);
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      this.loading = this.loadFiles();
     }
     if (this.ctx.state !== "running") await this.ctx.resume();
-    await this.loading;
+
+    // The entry only waits for the short intro asset. Long tracks are fetched in
+    // the background so a visitor is never blocked by several megabytes of audio.
+    await this.loadBuffer(site.audio.introUrl, 3500);
+    void this.loadBuffer(site.audio.ambienceUrl, 7000);
   }
 
-  private async loadFiles() {
+  async prepare(mode: Mode) {
+    const url = audioPlan(mode).url;
+    if (!url) return false;
+    return !!(await this.loadBuffer(url, 7000));
+  }
+
+  private async loadBuffer(url: string, timeoutMs: number): Promise<AudioBuffer | null> {
+    if (!url || !this.ctx) return null;
+    const cached = this.buffers.get(url);
+    if (cached) return cached;
+
+    const pending = this.pendingBuffers.get(url);
+    if (pending) return pending;
+
     const ctx = this.ctx;
-    if (!ctx) return;
-    const get = async (url: string) => {
-      if (!url) return null;
+    const request = (async () => {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
       try {
-        const r = await fetch(url);
-        if (!r.ok) return null;
-        return await ctx.decodeAudioData(await r.arrayBuffer());
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) return null;
+        const buffer = await ctx.decodeAudioData(await response.arrayBuffer());
+        this.buffers.set(url, buffer);
+        return buffer;
       } catch {
         return null;
+      } finally {
+        window.clearTimeout(timeout);
+        this.pendingBuffers.delete(url);
       }
-    };
-    const urls = [...new Set([site.audio.introUrl, site.audio.ambienceUrl, site.audio.trackUrl, site.audio.challengeClipUrl].filter(Boolean))];
-    await Promise.all(urls.map(async (url) => {
-      const buffer = await get(url);
-      if (buffer) this.buffers.set(url, buffer);
-    }));
+    })();
+
+    this.pendingBuffers.set(url, request);
+    return request;
   }
 
   setMuted(m: boolean) {
