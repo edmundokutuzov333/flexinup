@@ -10,7 +10,7 @@ void main(){ v = a*0.5+0.5; gl_Position = vec4(a,0.,1.); }`;
 // interlaced scan texture, subtle chroma smear, exposure breathing and beat-led signal hits.
 const FS = `#version 300 es
 precision mediump float;
-uniform sampler2D uVid;
+uniform sampler2D uVid; uniform sampler2D uOv;
 uniform vec2 uScale; uniform vec2 uOff;
 uniform float uT; uniform float uQ; uniform float uMirror; uniform float uFlash; uniform float uBeat;
 in vec2 v; out vec4 o;
@@ -62,6 +62,7 @@ void main(){
   col*=mix(.56,1.,vignette);
   // Brief signal instability follows kick transients, not a constant shake.
   col=mix(col,col*vec3(1.13,1.08,.82),burst*(.12+uBeat*.22));
+  vec4 overlay=texture(uOv,v); col=mix(col,overlay.rgb,overlay.a);
   col=mix(col,vec3(1.),uFlash);
   o=vec4(clamp(col,0.,1.),1.);
 }`;
@@ -70,7 +71,9 @@ export class FlexCam {
   gl: WebGL2RenderingContext;
   private prog: WebGLProgram;
   private vidTex: WebGLTexture;
-  private u = {} as Record<"uVid" | "uScale" | "uOff" | "uT" | "uQ" | "uMirror" | "uFlash" | "uBeat", WebGLUniformLocation | null>;
+  private ovTex: WebGLTexture;
+  private overlay: HTMLCanvasElement;
+  private u = {} as Record<"uVid" | "uOv" | "uScale" | "uOff" | "uT" | "uQ" | "uMirror" | "uFlash" | "uBeat", WebGLUniformLocation | null>;
   quality = 1;
   private frameTimes: number[] = [];
   private last = 0;
@@ -101,7 +104,7 @@ export class FlexCam {
     const attribute = gl.getAttribLocation(program, "a");
     gl.enableVertexAttribArray(attribute);
     gl.vertexAttribPointer(attribute, 2, gl.FLOAT, false, 0, 0);
-    for (const name of ["uVid","uScale","uOff","uT","uQ","uMirror","uFlash","uBeat"] as const) {
+    for (const name of ["uVid","uOv","uScale","uOff","uT","uQ","uMirror","uFlash","uBeat"] as const) {
       this.u[name] = gl.getUniformLocation(program, name);
     }
     this.vidTex = gl.createTexture()!;
@@ -111,6 +114,20 @@ export class FlexCam {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.uniform1i(this.u.uVid, 0);
+    gl.uniform1i(this.u.uOv, 1);
+    this.ovTex=gl.createTexture()!;
+    gl.bindTexture(gl.TEXTURE_2D,this.ovTex);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    this.overlay=document.createElement("canvas");
+    this.overlay.width=CAPTURE_W; this.overlay.height=CAPTURE_H;
+    drawBrandOverlay(this.overlay.getContext("2d")!);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D,this.ovTex);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,this.overlay);
+    gl.activeTexture(gl.TEXTURE0);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
   }
 
@@ -149,13 +166,38 @@ export class FlexCam {
     gl.uniform1f(this.u.uMirror,mirror?1:0);
     gl.uniform1f(this.u.uFlash,flash);
     gl.uniform1f(this.u.uBeat,Math.max(0,Math.min(1,beat)));
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,this.ovTex); gl.activeTexture(gl.TEXTURE0);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
   }
 
   dispose(){
     this.gl.deleteTexture(this.vidTex);
+    this.gl.deleteTexture(this.ovTex);
     this.gl.deleteProgram(this.prog);
   }
+}
+
+
+function drawBrandOverlay(ctx: CanvasRenderingContext2D) {
+  const W=CAPTURE_W,H=CAPTURE_H;
+  ctx.clearRect(0,0,W,H);
+  const band=ctx.createLinearGradient(0,H*.70,0,H);
+  band.addColorStop(0,"rgba(5,7,5,0)");
+  band.addColorStop(.25,"rgba(5,7,5,.30)");
+  band.addColorStop(1,"rgba(5,7,5,.62)");
+  ctx.fillStyle=band; ctx.fillRect(0,H*.70,W,H*.30);
+  ctx.textAlign="center"; ctx.textBaseline="middle";
+  ctx.shadowColor="rgba(0,0,0,.9)"; ctx.shadowBlur=13;
+  ctx.fillStyle="#E4DFD4";
+  ctx.font='700 66px "Rubik Dirt", "Anton", sans-serif';
+  ctx.fillText("I'M FLEXIN UP",W/2,H*.805);
+  ctx.shadowBlur=5; ctx.fillStyle="#F0EDE5";
+  ctx.font='24px "Special Elite", "Space Mono", monospace';
+  ctx.fillText("Ouça já em www.flexinup.site",W/2,H*.855);
+  ctx.shadowBlur=8; ctx.fillStyle="#C8302C";
+  ctx.font='700 27px "Special Elite", "Space Mono", monospace';
+  ctx.fillText("Khriys x INF8M8US",W/2,H*.902);
+  ctx.shadowBlur=0;
 }
 
 export function timecode(seconds: number){
