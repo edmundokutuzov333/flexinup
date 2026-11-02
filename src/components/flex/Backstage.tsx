@@ -44,6 +44,7 @@ function ClipCard({ clip, index, onOpen }: { clip: Clip; index: number; onOpen: 
     const el = ref.current?.parentElement;
     if (!el) return;
     const io = new IntersectionObserver(([e]) => {
+      if (!e) return;
       setNear(e.isIntersecting);
       if (ref.current) e.isIntersecting ? ref.current.play().catch(() => {}) : ref.current.pause();
     }, { rootMargin: "200px" });

@@ -42,7 +42,7 @@ export function Challenge({ onFilm }: { onFilm: () => void }) {
           <p className="font-mono text-[11px] uppercase text-muted-foreground">Nada é enviado para servidores. Tudo corre no teu telemóvel.</p>
 
           <div className="grid w-full grid-cols-3 gap-2 font-mono text-[10px] uppercase">
-            {[["Início", c.startDate], ["Fecho", c.endDate], ["Vencedor", c.announceDate]].map(([l, d]) => (
+            {([["Início", c.startDate], ["Fecho", c.endDate], ["Vencedor", c.announceDate]] as const).map(([l, d]) => (
               <div key={l} className="border border-border bg-background/70 p-2">
                 <p className="text-nv">{l}</p>
                 <p className="text-bone">{formatDatePt(d)}</p>

@@ -103,7 +103,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     navigator.permissions
       ?.query({ name: "camera" as PermissionName })
-      .then((p) => p.state === "granted" && startCamera("user"))
+      .then((p) => { if (p.state === "granted") void startCamera("user"); })
       .catch(() => {});
     document.body.style.overflow = "hidden";
     return () => {
@@ -180,7 +180,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
       micNode.current?.disconnect();
       micStream.current?.getTracks().forEach((t) => t.stop());
       vibrate([40, 60, 40]);
-      const blob = new Blob(chunks, { type: choice.mime.split(";")[0] });
+      const blob = new Blob(chunks, { type: choice.mime.split(";")[0] ?? choice.mime });
       const file = new File([blob], `flexinup.${choice.ext}`, { type: blob.type });
       setCanShare(!!navigator.canShare?.({ files: [file] }));
       setResult({ url: URL.createObjectURL(blob), blob, ext: choice.ext });

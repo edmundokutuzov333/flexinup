@@ -47,7 +47,7 @@ function Prize({ kind, label, fallback }: { kind: "money" | "goyard"; label: str
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
   useEffect(() => {
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && (setShow(true), io.disconnect()), { rootMargin: "300px" });
+    const io = new IntersectionObserver(([e]) => e?.isIntersecting && (setShow(true), io.disconnect()), { rootMargin: "300px" });
     if (ref.current) io.observe(ref.current);
     return () => io.disconnect();
   }, []);

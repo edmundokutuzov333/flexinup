@@ -140,7 +140,7 @@ class AudioEngine {
         if (s % 2 === 0 || roll) this.hat(t, roll ? 0.12 : 0.18);
         if (roll) this.hat(t + sixteenth / 2, 0.1);
       }
-      if (s % 8 === 0) this.bell(t, [196, 233, 175, 155][(s / 8) % 4]);
+      if (s % 8 === 0) this.bell(t, [196, 233, 175, 155][(s / 8) % 4] ?? 196);
       this.nextBeat += sixteenth;
       this.step++;
     }
