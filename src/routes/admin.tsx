@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import type { Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { adminListEntries, adminLogin, adminSetStatus } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -76,19 +76,12 @@ function Panel({ code, onLogout }: { code: string; onLogout: () => void }) {
   };
   const logoutBtn = onLogout;
   if (rows === null) return null;
-  if (!isAdmin)
-    return (
-      <div className="mt-20 text-center font-mono text-sm">
-        <p>Esta conta não tem acesso de equipa.</p>
-        <button onClick={() => supabase.auth.signOut()} className="mt-4 min-h-12 text-gold underline">Sair</button>
-      </div>
-    );
   const shown = rows.filter((r) => filter === "todos" || r.status === filter);
   return (
     <div>
       <div className="flex items-center justify-between">
         <h1 className="font-display text-5xl text-gold-metal">Inscrições ({rows.length})</h1>
-        <button onClick={() => supabase.auth.signOut()} className="min-h-12 font-mono text-xs uppercase text-gold">Sair</button>
+        <button onClick={logoutBtn} className="min-h-12 font-mono text-xs uppercase text-gold">Sair</button>
       </div>
       <div className="mt-4 flex gap-2 font-mono text-xs uppercase">
         {["todos", "pendente", "validado", "rejeitado"].map((s) => (
