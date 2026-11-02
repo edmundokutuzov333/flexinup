@@ -148,7 +148,7 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
           <span className="entry-side-note" aria-hidden="true">MAPUTO · MMXXVI</span>
           <span className="entry-hand-note" aria-hidden="true">this is how we flex</span>
         </section>
-      </main>
+      </div>
 
       <footer className="entry-footer">
         <div className="entry-footer-copy">
