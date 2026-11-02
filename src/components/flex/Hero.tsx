@@ -26,7 +26,7 @@ export function Hero({ onFilm, onListen }: { onFilm: () => void; onListen: () =>
   }, []);
 
   return (
-    <section ref={ref} id="top" className="relative flex min-h-[100svh] flex-col overflow-hidden pt-16" style={{ "--px": 0, "--py": 0 } as React.CSSProperties}>
+    <section ref={ref} id="top" className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden pb-32 pt-16 md:pb-24" style={{ "--px": 0, "--py": 0 } as React.CSSProperties}>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_60%,color-mix(in_oklab,var(--gold)_14%,transparent),transparent_60%)]" />
       <span className="absolute left-4 top-20 font-mono text-[10px] text-gold/60">✚ REL. 2026</span>
       <span className="absolute right-4 top-20 font-mono text-[10px] text-gold/60">TRK 01 ✦</span>
@@ -38,7 +38,7 @@ export function Hero({ onFilm, onListen }: { onFilm: () => void; onListen: () =>
       </div>
 
       {/* Artists in front, heads breaking the title */}
-      <div className="relative z-20 -mt-[34vw] flex items-start justify-center pb-40 md:-mt-[16vw]">
+      <div className="relative z-20 -mt-[20vw] flex items-start justify-center md:-mt-[10vw]">
         <Artist side="left" src={img.inf8m8us} alt="INF8M8US" sparkles={sparklesI} delay={0} />
         <Artist side="right" src={img.khriys} alt="Khriys" sparkles={sparklesK} delay={2.2} />
       </div>
@@ -63,7 +63,7 @@ function Artist({ side, src, alt, sparkles, delay }: { side: "left" | "right"; s
   const depth = side === "left" ? 18 : 26;
   return (
     <div
-      className={`relative w-[62vw] max-w-[560px] ${side === "left" ? "-mr-[14vw] md:-mr-24" : "-ml-[14vw] md:-ml-24"}`}
+      className={`relative w-[86vw] max-w-[560px] ${side === "left" ? "-mr-[30vw] md:-mr-24" : "-ml-[30vw] md:-ml-24"}`}
       style={{ transform: `translate3d(calc(var(--px) * ${depth}px), calc(var(--py) * ${depth / 2}px), 0)` }}
     >
       <div className="anim-breathe origin-bottom" style={{ animationDelay: `${delay}s` }}>
@@ -71,7 +71,7 @@ function Artist({ side, src, alt, sparkles, delay }: { side: "left" | "right"; s
           <img
             src={src.src}
             srcSet={src.srcSet}
-            sizes="(max-width: 768px) 62vw, 560px"
+            sizes="(max-width: 768px) 86vw, 560px"
             alt={alt}
             width={540}
             height={540}
