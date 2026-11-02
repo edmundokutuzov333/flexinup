@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { audio } from "@/lib/audio-engine";
-import { FlexCam, pickMime, timecode } from "@/lib/night-vision";
+import { FlexCam, pickMime, timecode } from "@/lib/flex-cam";
 import { buildCaption, site } from "@/config/site";
 import { Glitch } from "./Glitch";
 
