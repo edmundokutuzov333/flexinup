@@ -267,7 +267,7 @@
 .chapter-name { color: var(--bone); font-size: 24px; line-height: 1.2; }
 .os-gate { text-align: left; }
 .gate-system { width: min(100% - 48px, 480px); }
-.os-wordmark { color: var(--bone); font-size: 54px; line-height: 1; margin-bottom: 16px; }
+.os-gate .os-wordmark { color: var(--bone); font-size: 54px; line-height: 1; margin-bottom: 16px; }
 .boot-terminal { border-block: 1px solid var(--line); margin-block: 40px; padding-block: 24px; color: var(--bone-dim); font-size: 11px; line-height: 2.4; }
 .boot-terminal p:last-child { color: var(--opium); }
 .os-gate .gate-enter { width: 100%; animation: none; }
@@ -291,7 +291,7 @@
   .hero-title span:last-child { font-size: 144px; }
   .hero-artists { top: 220px; }
   .hero-cover { height: 710px; }
-  .os-wordmark { font-size: 80px; }
+  .os-gate .os-wordmark { font-size: 80px; }
   .os-intro > .intro-brand { font-size: 176px; }
   .intro-trailer { inset: 8% 10% 0; }
   .system-telemetry, .system-signal { bottom: 24px; }
