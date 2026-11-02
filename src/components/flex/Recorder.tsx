@@ -4,7 +4,7 @@ import { FlexCam, pickMime, timecode } from "@/lib/flex-cam";
 import { buildCaption, site } from "@/config/site";
 import { Glitch } from "./Glitch";
 
-type Phase = "prep" | "requesting" | "loading" | "ready" | "countdown" | "recording" | "review" | "success" | "error";
+type Phase = "prep" | "requesting" | "loading" | "preparing" | "ready" | "countdown" | "recording" | "review" | "success" | "error";
 type ErrKind = "denied" | "nocam" | "unsupported" | "generic";
 
 const DURATION = site.challenge.seconds;
@@ -31,7 +31,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
   const micNode = useRef<MediaStreamAudioSourceNode | null>(null);
   const raf = useRef(0);
   const recStart = useRef(0);
-  const recorder = useRef<MediaRecorder | null>(null);
+  const recorder = useRef<MediaRecorder | null>(null);\n  const beginLock = useRef(false);
   const phaseRef = useRef<Phase>("prep");
   phaseRef.current = phase;
 
@@ -123,7 +123,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     cancelAnimationFrame(raf.current);
-    if (["ready", "countdown", "recording", "loading"].includes(phase)) raf.current = requestAnimationFrame(loop);
+    if (["ready", "countdown", "recording", "loading", "preparing"].includes(phase)) raf.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf.current);
   }, [phase, loop]);
 
@@ -148,14 +148,26 @@ export function Recorder({ onClose }: { onClose: () => void }) {
   };
 
   const begin = async () => {
-    await audio.unlock();
-    setPhase("countdown");
-    for (const n of [3, 2, 1]) {
-      setCount(n);
-      vibrate(20);
-      await new Promise((r) => setTimeout(r, 800));
+    if (beginLock.current) return;
+    beginLock.current = true;
+    setPhase("preparing");
+
+    try {
+      await audio.unlock();
+      await audio.prepare("challenge");
+      setPhase("countdown");
+      for (const n of [3, 2, 1]) {
+        setCount(n);
+        vibrate(20);
+        await new Promise((r) => setTimeout(r, 800));
+      }
+      await record();
+    } catch {
+      setErr("generic");
+      setPhase("error");
+    } finally {
+      beginLock.current = false;
     }
-    record();
   };
 
   const record = async () => {
@@ -239,7 +251,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
     setTimeout(() => setCopied(false), 1800);
   };
 
-  const live = ["loading", "ready", "countdown", "recording"].includes(phase);
+  const live = ["loading", "preparing", "ready", "countdown", "recording"].includes(phase);
 
   return (
     <div role="dialog" aria-modal="true" aria-label="Gravar o teu flex" className="fixed inset-0 z-[100] flex items-center justify-center bg-background">
@@ -277,7 +289,7 @@ export function Recorder({ onClose }: { onClose: () => void }) {
           </Panel>
         )}
         {phase === "requesting" && <Status text="A pedir permissão…" />}
-        {phase === "loading" && <Status text="A carregar o filtro…" />}
+        {phase === "loading" && <Status text="A carregar o filtro…" />}\n        {phase === "preparing" && <Status text="A preparar a música…" />}
 
         {phase === "ready" && (
           <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-4 bg-gradient-to-t from-background/90 to-transparent p-5 pb-8">
