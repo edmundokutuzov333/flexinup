@@ -7,7 +7,7 @@ Cria uma landing page de uma só página, mobile-first (90% do tráfego vem de t
 O site tem 3 funções:
 
 Dar uma experiência imersiva de lançamento (intro, bastidores, 3D, prémios).
-Permitir que o visitante grave um vídeo de 30s no próprio site, com a música e o filtro oficial night vision. Esta é a função principal.
+Permitir que o visitante grave um vídeo de 30s no próprio site, com a música e o filtro oficial DV camera. Esta é a função principal.
 Gerar partilha viral: o visitante descarrega, publica e faz tag ao Khriys.
 
 Idioma: Português (Moçambique), com microcopy curta, seca e de rua. O nome da música e os créditos ficam sempre em inglês.
@@ -33,7 +33,7 @@ Nunca mais de 2 famílias.
 Textura e efeitos globais (todos leves, via CSS ou canvas, sem peso):
 
 Grão de filme animado a 8–10% de opacidade
-Vinheta forte nos cantos
+Vinheta óptica forte e exposição com flicker subtil nos cantos
 Scanlines subtis nas secções de vídeo
 Cursor customizado (cruz de mira dourada) no desktop
 Pequenos símbolos opium: cruzes, estrelas de 4 pontas, números em fonte pixel nos cantos
@@ -134,21 +134,21 @@ O vídeo final tem de parecer de câmara de visão noturna, bem editado e pronto
 
 Filtro (WebGL, shader em tempo real no canvas)
 
-Conversão para monocromático com tom verde fósforo (#39FF7A) e preto profundo
-Contraste alto, highlights queimados com bloom suave
-Grão digital animado e ruído de sensor
-Scanlines finas e leve aberração cromática nas bordas
+Imagem low-light de câmara digital antiga, com verdes sujos, cinzentos e highlights amarelo-oliva
+Sombras esmagadas, contraste irregular, highlights queimados e halation suave
+Ruído de sensor, grain temporal e textura de compressão
+Scanlines/interlace subtil, smear cromático e instabilidade horizontal ocasional
 Vinheta forte
-Pequeno flicker e instabilidade horizontal ocasional (como câmara antiga)
+Oscilação de exposição e pequenos signal tears, com intensidade reactiva à batida do beat
 Efeito de olhos/luzes a "estourar" quando há fontes de luz (bloom em pontos brilhantes)
 
 Overlay gráfico permanente (queimado no vídeo)
 
-Topo: ● REC (vermelho, a piscar) + timecode a correr (00:00:00 → 00:00:30)
+O vídeo contém apenas três linhas de identidade: I'M FLEXIN UP / Ouça já em www.flexinup.site / Khriys x INF8M8US
 Topo, centro e grande: I'M FLEXIN UP'
 Logo abaixo: "Ouça já em www.flexinup.com"
 Rodapé: Khriys x INF8M8US
-Cantos: marcas de enquadramento (viewfinder), bateria e ISO falsos, "NIGHT VISION" em mono
+Sem HUD técnico, timecode, ISO, bateria, marcas de enquadramento ou indicadores adicionais
 Tudo dentro da safe zone do Instagram/TikTok (margens de ~10% e longe da zona de botões e legenda)
 
 Fim do vídeo (últimos 2s): flash branco e cartão final com o título + URL.
