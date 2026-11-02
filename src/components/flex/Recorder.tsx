@@ -31,7 +31,8 @@ export function Recorder({ onClose }: { onClose: () => void }) {
   const micNode = useRef<MediaStreamAudioSourceNode | null>(null);
   const raf = useRef(0);
   const recStart = useRef(0);
-  const recorder = useRef<MediaRecorder | null>(null);\n  const beginLock = useRef(false);
+  const recorder = useRef<MediaRecorder | null>(null);
+  const beginLock = useRef(false);
   const phaseRef = useRef<Phase>("prep");
   phaseRef.current = phase;
 
@@ -289,7 +290,8 @@ export function Recorder({ onClose }: { onClose: () => void }) {
           </Panel>
         )}
         {phase === "requesting" && <Status text="A pedir permissão…" />}
-        {phase === "loading" && <Status text="A carregar o filtro…" />}\n        {phase === "preparing" && <Status text="A preparar a música…" />}
+        {phase === "loading" && <Status text="A carregar o filtro…" />}
+        {phase === "preparing" && <Status text="A preparar a música…" />}
 
         {phase === "ready" && (
           <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-4 bg-gradient-to-t from-background/90 to-transparent p-5 pb-8">
