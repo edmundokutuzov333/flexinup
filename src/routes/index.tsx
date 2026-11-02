@@ -9,6 +9,7 @@ import { Submit } from "@/components/flex/Submit";
 import { Backstage } from "@/components/flex/Backstage";
 import { Listen, Footer } from "@/components/flex/Listen";
 import { audio } from "@/lib/audio-engine";
+import { SystemEffects } from "@/components/flex/SystemEffects";
 
 const Recorder = lazy(() => import("@/components/flex/Recorder").then((m) => ({ default: m.Recorder })));
 
@@ -48,10 +49,11 @@ function Index() {
       <Hero onFilm={() => document.getElementById("challenge")?.scrollIntoView()} onListen={() => document.getElementById("ouvir")?.scrollIntoView()} />
       <Challenge onFilm={film} />
       <Prizes />
-      <Submit />
       <Backstage />
+      <Submit />
       <Listen />
       <Footer onReplayIntro={() => { audio.stop(); scrollTo(0, 0); setOverlay("intro"); }} />
+      <SystemEffects active={!overlay && !rec} />
       {rec && (
         <Suspense fallback={<div className="fixed inset-0 z-[100] flex items-center justify-center bg-background font-mono text-sm text-nv">● A carregar o filtro…</div>}>
           <Recorder onClose={() => { setRec(false); audio.play("full"); }} />
