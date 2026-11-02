@@ -308,3 +308,67 @@
   .intro-flash, .chapter-flash, .system-effects { display: none; }
   .rgb-brand:hover, .rgb-brand:active { text-shadow: none; }
 }
+
+/* ===== SERIGRAFIA / XEROX / FANZINE — camada final ===== */
+:root {
+  --ink: #141416; --ink-2: #1B1B1E; --line: #3A3835;
+  --bone: #E4DFD4; --bone-dim: #9A958B;
+  --gold: #E4DFD4; --gold-hi: #FFFFFF;
+  --opium: #C8302C; --rec: #FF3B30;
+  --gradient-gold: linear-gradient(100deg, var(--bone), var(--bone));
+  --hero-duotone: grayscale(1) contrast(1.9) brightness(1.05);
+  --paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  --speck: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='1'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -14 7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  --font-display: "Rubik Dirt", "Anton", sans-serif;
+  --font-script: "Mrs Saint Delafield", cursive;
+  --font-mono: "Special Elite", "JetBrains Mono", monospace;
+}
+body, .editorial-site { background-color: var(--ink) !important; background-image: var(--paper) !important; font-family: var(--font-mono) !important; }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 109; background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / .55)); }
+.fx-grain { animation: none !important; opacity: .12 !important; mix-blend-mode: normal !important; background-image: var(--speck) !important; inset: 0 !important; }
+.font-display, .section-title, .hero-title, .prize-label, .editorial-intro > p { font-family: var(--font-display) !important; letter-spacing: -.01em !important; line-height: .9 !important; }
+.hero-title, .hero-title span { background: none !important; color: var(--bone) !important; -webkit-text-fill-color: var(--bone) !important; animation: none !important; text-shadow: none !important; }
+.hero-title::after { content: "Khriys x Inf8m8us"; position: absolute; left: 50%; top: 52%; transform: translate(-50%,-50%) rotate(-8deg); font-family: var(--font-script); font-size: .55em; color: var(--opium); -webkit-text-fill-color: var(--opium); text-transform: none; white-space: nowrap; z-index: 5; letter-spacing: 0; }
+.section-title::after { content: ""; display: block; width: 140px; height: 14px; margin-top: 12px; background: var(--opium); -webkit-mask: var(--speck); mask: var(--speck); transform: rotate(-2deg); }
+.signature-line { height: 0; border-top: 1px dashed var(--line); background: none; }
+.signature-line span { background: var(--opium); transform: none; width: 10px; height: 10px; top: -5px; border-radius: 0; }
+.signature-line span::after { content: "+"; position: absolute; left: 16px; top: -7px; color: var(--bone-dim); font-size: 12px; }
+.editorial-label { font-family: var(--font-mono); letter-spacing: .14em; }
+.text-gold-metal, .editorial-label b, .editorial-label strong { color: var(--opium) !important; }
+/* polaroid / xerox photos */
+.hero-artist img, .intro-jewel img, .filter-preview img { filter: var(--hero-duotone) !important; }
+.hero-artist { background: var(--bone); padding: 10px 10px 44px; box-shadow: 0 2px 0 rgb(0 0 0 / .4); }
+.artist-left { transform: rotate(-4deg) translateY(var(--drift)) !important; }
+.artist-right { transform: rotate(3deg) translateY(var(--drift)) !important; }
+.hero-artist img { mask-image: none !important; background: var(--ink); }
+.hero-artist::before { content: ""; position: absolute; top: -12px; left: 35%; width: 90px; height: 26px; background: rgb(228 223 212 / .55); transform: rotate(-6deg); z-index: 3; }
+.hero-artist::after { content: "KHRIYS"; position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-family: var(--font-script); color: var(--opium); font-size: 30px; line-height: 1; }
+.artist-right::after { content: "INF8M8US"; }
+.jewel-light { display: none; }
+.hero-cover::after { background: none; }
+/* buttons = carimbos */
+.editorial-button, .hero-cta, .challenge-cta, .gate-enter { background: var(--bone) !important; color: var(--ink) !important; border: 2px solid var(--bone) !important; animation: none; font-family: var(--font-mono) !important; position: relative; }
+.editorial-button:hover { background: var(--opium) !important; border-color: var(--opium) !important; color: var(--bone) !important; }
+.editorial-button::after { content: ""; position: absolute; inset: 0; background: var(--ink); -webkit-mask: var(--speck); mask: var(--speck); opacity: .35; pointer-events: none; }
+.gate-enter { animation: gate-pulse 2.4s ease-in-out infinite; }
+/* cards = fichas de evidência */
+.challenge-layout { border: 2px solid var(--bone) !important; outline: 1px dashed var(--line); outline-offset: 8px; background: var(--ink-2) !important; position: relative; }
+.challenge-layout::before { content: "EVIDENCE Nº 01 — 30s"; position: absolute; top: -14px; right: 16px; background: var(--opium); color: var(--bone); font-size: 11px; padding: 4px 10px; transform: rotate(2deg); letter-spacing: .12em; }
+.filter-preview { border: 10px solid var(--bone); border-bottom-width: 40px; transform: rotate(-2deg); }
+.prize-stage { background: var(--ink-2); border: 10px solid var(--bone); border-bottom-width: 44px; }
+.prize-stage::after { content: "PROVA"; position: absolute; bottom: -36px; left: 12px; font-family: var(--font-script); color: var(--opium); font-size: 28px; text-transform: none; }
+.prize-grid > *:nth-child(odd) .prize-stage { transform: rotate(-1.5deg); }
+.prize-grid > *:nth-child(even) .prize-stage { transform: rotate(1.5deg); }
+.prize-rules > * { border: 1px solid var(--line); padding: 20px; background: var(--ink-2); }
+.clip-frame { border: 8px solid var(--bone) !important; border-bottom-width: 32px !important; }
+.clip-item:nth-child(odd) { transform: rotate(-1deg); }
+.clip-item:nth-child(even) { transform: rotate(1deg); }
+.stream-list a:hover { background: var(--bone) !important; color: var(--ink) !important; }
+.waveform span { background: var(--bone) !important; }
+.editorial-input:focus { border-color: var(--opium) !important; }
+.editorial-nav { background: var(--ink) !important; border-bottom: 1px dashed var(--line) !important; }
+.mobile-film-bar { border-top: 2px solid var(--opium) !important; }
+.editorial-gate, .editorial-intro { background-color: var(--ink) !important; background-image: var(--paper) !important; }
+.prize-band { background: transparent !important; }
+::selection { background: var(--opium); color: var(--bone); }
+@media (prefers-reduced-motion: reduce) { .gate-enter { animation: none; } }
