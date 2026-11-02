@@ -8,7 +8,6 @@ export const INTRO_KEY = "fu_intro_seen";
 /** Gate (unlocks audio) + 9s intro synced to the 140bpm grid. */
 export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: () => void }) {
   const [playing, setPlaying] = useState(mode === "intro");
-  const startIntro = useRef(() => {});
 
   const enter = async () => {
     await audio.unlock();
@@ -32,7 +31,6 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
           ENTER
         </button>
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-bone/70">Som ligado. Luzes apagadas.</p>
-        <span className="sr-only">{String(startIntro.current)}</span>
       </div>
     );
   }
