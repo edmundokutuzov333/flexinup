@@ -30,7 +30,7 @@ function Piece({ image, kind }: { image: string; kind: "money" | "goyard" }) {
   };
 
   return (
-    <group ref={group} onPointerOver={hop} onPointerDown={hop}>
+    <group ref={group} scale={kind === "money" ? 0.78 : 1} onPointerOver={hop} onPointerDown={hop}>
       {Array.from({ length: LAYERS }).map((_, i) => (
         <mesh key={i} position={[0, 0, (i - LAYERS / 2) * 0.012]}>
           <planeGeometry args={[2.2, 2.2]} />

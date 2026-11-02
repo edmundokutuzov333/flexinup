@@ -86,7 +86,9 @@ export function Submit() {
               <input className={field + " mt-1"} placeholder="+258 84 000 0000" value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} maxLength={120} />
             </label>
             {/* honeypot */}
-            <input tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-0 w-0 opacity-0" name="website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} />
+            <div aria-hidden className="hidden">
+              <input tabIndex={-1} autoComplete="off" name="website" value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} />
+            </div>
             {error && <p role="alert" className="font-mono text-sm text-rec">{error}</p>}
             <button disabled={state === "sending"} className="mt-2 min-h-16 bg-gold-metal font-display text-4xl text-primary-foreground shadow-[var(--shadow-gold)] disabled:opacity-60">
               {state === "sending" ? "A ENVIAR…" : "ENTRAR →"}

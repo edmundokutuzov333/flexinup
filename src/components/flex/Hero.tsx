@@ -38,7 +38,7 @@ export function Hero({ onFilm, onListen }: { onFilm: () => void; onListen: () =>
       </div>
 
       {/* Artists in front, heads breaking the title */}
-      <div className="relative z-20 -mt-[18vw] flex flex-1 items-end justify-center md:-mt-[9vw]">
+      <div className="relative z-20 -mt-[34vw] flex items-start justify-center pb-40 md:-mt-[16vw]">
         <Artist side="left" src={img.inf8m8us} alt="INF8M8US" sparkles={sparklesI} delay={0} />
         <Artist side="right" src={img.khriys} alt="Khriys" sparkles={sparklesK} delay={2.2} />
       </div>
