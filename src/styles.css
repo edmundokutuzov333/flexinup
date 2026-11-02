@@ -454,6 +454,7 @@ footer::after { content: "PRODUCED BY INF8M8US · VOCALS BY KHRIYS · MAPUTO 202
   grid-template-rows: 10.5% 44% 27% 12.5%;
   align-content: space-between;
   width: min(calc(100vw - 24px), calc((100svh - 32px) * .8), 820px);
+  height: min(calc((100vw - 24px) * 1.25), calc(100svh - 32px), 1025px);
   aspect-ratio: 4 / 5;
   max-height: calc(100svh - 32px);
   min-width: 0;
