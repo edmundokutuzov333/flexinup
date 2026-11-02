@@ -53,28 +53,30 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
     };
   }, []);
 
-  const enter = async () => {
+  const enter = () => {
     if (loading) return;
     setLoading(true);
     setError(false);
 
-    let audioReady = true;
+    let audioReady: Promise<void>;
     try {
-      await audio.unlock();
+      // Call unlock inside the click gesture so browsers can resume audio.
+      audioReady = audio.unlock();
     } catch {
-      audioReady = false;
-      setError(true);
+      audioReady = Promise.reject(new Error("Audio unavailable"));
     }
 
     if (hasSeenIntro()) {
-      if (audioReady) audio.play("full");
+      // Returning visitors enter immediately. Audio loads in the background.
       onDone();
+      void audioReady.then(() => audio.play("full")).catch(() => {});
       return;
     }
 
-    // Sound is an enhancement, not a gate: the visitor can always enter.
+    // Never make the visitor wait for an audio file before showing the intro.
     setPlaying(true);
     setLoading(false);
+    void audioReady.catch(() => {});
   };
 
   return playing ? (
@@ -85,15 +87,15 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
       <div className="entry-grain" aria-hidden="true" />
 
       <header className="entry-header">
-        <span className="entry-edition">FU <b>001</b></span>
+        <span className="entry-edition">FLEXIN UP&#39; <b>001</b></span>
         <span className="entry-header-title">KHRIYS <i>×</i> INF8M8US</span>
-        <span className="entry-header-type">THE NEW SINGLE</span>
+        <span className="entry-header-type">OFFICIAL SINGLE</span>
         <GateSound />
       </header>
 
       <div className="entry-main">
         <section className="entry-copy">
-          <p className="entry-kicker"><span>01</span> THE FLEXIN CAMPAIGN</p>
+          <p className="entry-kicker"><span>01</span> THE NEW SINGLE</p>
 
           <h1 className="entry-headline font-display">
             <span className="entry-headline-im">I'M</span>
@@ -103,8 +105,8 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
 
           <p className="entry-artists">KHRIYS <i>×</i> INF8M8US</p>
           <div className="entry-rule" aria-hidden="true"><span /></div>
-          <p className="entry-statement">NO POSE.<br />ALL PRESENCE.</p>
-          <p className="entry-listen">OUÇA JÁ EM <strong>WWW.FLEXINUP.SITE</strong></p>
+          <p className="entry-statement">OUÇA JÁ EM</p>
+          <p className="entry-listen"><strong>WWW.FLEXINUP.SITE</strong></p>
         </section>
 
         <section className="entry-visual" aria-label="Retratos de Khriys e INF8M8US e detalhes da campanha">
@@ -145,15 +147,15 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
             <span>NO LIMITS</span>
           </div>
 
-          <span className="entry-side-note" aria-hidden="true">MAPUTO · MMXXVI</span>
-          <span className="entry-hand-note" aria-hidden="true">this is how we flex</span>
+          <span className="entry-side-note" aria-hidden="true">MAPUTO · MOZAMBIQUE</span>
+          <span className="entry-hand-note" aria-hidden="true">THIS IS HOW WE FLEX</span>
         </section>
       </div>
 
       <footer className="entry-footer">
         <div className="entry-footer-copy">
           <span>KHRIYS × INF8M8US</span>
-          <span>EVERYTHING OR NOTHING AT ALL</span>
+          <span>OUVE A FAIXA. ENTRA NO CHALLENGE.</span>
         </div>
 
         <Button
@@ -162,7 +164,7 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
           disabled={loading}
           className="gate-enter entry-enter"
         >
-          {loading ? "A ABRIR..." : "TOCA PARA ENTRAR"}
+          {loading ? "A ABRIR..." : "ENTRAR NO SITE"}
           <span aria-hidden="true">↗</span>
         </Button>
 
@@ -193,14 +195,31 @@ function Intro({ onDone }: { onDone: () => void }) {
   };
 
   useEffect(() => {
-    audio.play("intro", false);
-    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const ids = [
-      setTimeout(() => setCut(1), 2000),
-      setTimeout(() => setCut(2), 4000),
-      setTimeout(finish, calm ? 2000 : site.audio.introSeconds * 1000),
-    ];
-    return () => ids.forEach(clearTimeout);
+    let cancelled = false;
+    let ids: number[] = [];
+
+    const startIntro = async () => {
+      try {
+        await audio.unlock();
+      } catch {
+        // Intro visuals and the skip action remain available without sound.
+      }
+      if (cancelled) return;
+
+      audio.play("intro", false);
+      const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      ids = [
+        window.setTimeout(() => setCut(1), 2000),
+        window.setTimeout(() => setCut(2), 4000),
+        window.setTimeout(finish, calm ? 2000 : site.audio.introSeconds * 1000),
+      ];
+    };
+
+    void startIntro();
+    return () => {
+      cancelled = true;
+      ids.forEach(window.clearTimeout);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
