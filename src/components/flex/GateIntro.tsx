@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { audio } from "@/lib/audio-engine";
 import { img } from "@/lib/assets";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
-import { FlexAltarArtwork } from "./FlexAltarArtwork";
 
 export const INTRO_KEY = "fu_intro_seen";
 
@@ -30,7 +29,6 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
   const [playing, setPlaying] = useState(mode === "intro");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const gateRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -43,13 +41,9 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
     if (loading) return;
     setLoading(true);
     setError(false);
-    const startedAt = performance.now();
+
     try {
       await audio.unlock();
-      const sweepTimeLeft = 520 - (performance.now() - startedAt);
-      if (sweepTimeLeft > 0) {
-        await new Promise((resolve) => window.setTimeout(resolve, sweepTimeLeft));
-      }
       if (localStorage.getItem(INTRO_KEY)) {
         audio.play("full");
         onDone();
@@ -62,81 +56,34 @@ export function GateIntro({ mode, onDone }: { mode: "gate" | "intro"; onDone: ()
     }
   };
 
-  const moveAltar = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-    const gate = gateRef.current;
-    if (!gate) return;
-    gate.style.setProperty("--altar-tilt-x", `${(-y * 3.2).toFixed(2)}deg`);
-    gate.style.setProperty("--altar-tilt-y", `${(x * 4.2).toFixed(2)}deg`);
-    gate.style.setProperty("--altar-spot-x", `${(50 + x * 34).toFixed(1)}%`);
-    gate.style.setProperty("--altar-spot-y", `${(42 + y * 32).toFixed(1)}%`);
-  };
-
-  const resetAltar = () => {
-    const gate = gateRef.current;
-    if (!gate) return;
-    gate.style.setProperty("--altar-tilt-x", "0deg");
-    gate.style.setProperty("--altar-tilt-y", "0deg");
-    gate.style.setProperty("--altar-spot-x", "50%");
-    gate.style.setProperty("--altar-spot-y", "42%");
-  };
-
   return playing ? (
     <Intro onDone={onDone} />
   ) : (
-    <div
-      ref={gateRef}
-      className={`editorial-gate altar-gate${loading ? " is-opening" : ""}`}
-      aria-label="Entrada de I'M FLEXIN UP'"
-      aria-busy={loading}
-      onPointerMove={moveAltar}
-      onPointerLeave={resetAltar}
-    >
-      <div className="altar-light" aria-hidden="true" />
-      <div className="altar-vignette" aria-hidden="true" />
+    <div className="editorial-gate simple-gate" aria-label="Entrada de I'M FLEXIN UP'" aria-busy={loading}>
+      <div className="simple-gate-art" aria-hidden="true">
+        <img className="simple-gate-artist simple-gate-artist--left" src={img.khriys.src} alt="" />
+        <img className="simple-gate-artist simple-gate-artist--right" src={img.inf8m8us.src} alt="" />
+      </div>
+
       <GateSound />
 
-      <div className="altar-topline">
-        <span className="altar-edition">FU <b>001</b></span>
-        <span className="altar-artists">KHRIYS <i>×</i> INF8M8US</span>
-        <span className="altar-collection">THE FLEX ALTAR</span>
-      </div>
-
-      <div className="altar-portraits" aria-hidden="true">
-        <img className="altar-portrait altar-portrait--left" src={img.khriys.src} alt="" />
-        <img className="altar-portrait altar-portrait--right" src={img.inf8m8us.src} alt="" />
-      </div>
-
-      <div className="altar-stage" aria-hidden="true">
-        <div className="altar-halo" />
-        <div className="altar-artwork">
-          <div className="altar-artwork-float">
-            <FlexAltarArtwork />
-          </div>
-          <span className="altar-reflection" />
-        </div>
-      </div>
-
-      <div className="altar-copy">
-        <p className="altar-eyebrow">UMA DECLARAÇÃO DE PRESENÇA</p>
-        <h1 className="altar-title">
-          <span>I'M FLEXIN</span>
-          <span className="altar-title-up">UP<span>'</span></span>
+      <div className="simple-gate-main">
+        <p className="simple-gate-kicker">A NOVA FAIXA DE KHRIYS X INF8M8US</p>
+        <h1 className="simple-gate-title font-brand">
+          <span>I'M</span>
+          <span>FLEXIN</span>
+          <span className="simple-gate-title-up">UP'</span>
         </h1>
-        <p className="altar-signature">Khriys <i>×</i> INF8M8US</p>
-      </div>
+        <p className="simple-gate-signature">Khriys <i>×</i> INF8M8US</p>
 
-      <div className="altar-action">
-        <Button variant="editorial" onClick={enter} disabled={loading} className="gate-enter altar-enter">
-          <span className="altar-enter-icon" aria-hidden="true">✦</span>
-          {loading ? "A ACENDER..." : "TOCA PARA ENTRAR"}
-          <span className="altar-enter-arrow" aria-hidden="true">↗</span>
+        <Button variant="editorial" onClick={enter} disabled={loading} className="gate-enter simple-gate-enter">
+          {loading ? "A ABRIR..." : "TOCA PARA ENTRAR"}
+          <span aria-hidden="true">↗</span>
         </Button>
-        <p>{error ? "O SOM NÃO ARRANCOU. TENTA OUTRA VEZ." : "LUZES BAIXAS. BRILHO ALTO."}</p>
-        <span className="altar-error" role="status">{error ? "Verifica o som e tenta novamente." : ""}</span>
+
+        <p className="simple-gate-note" role={error ? "status" : undefined}>
+          {error ? "O SOM NÃO ARRANCOU. TENTA OUTRA VEZ." : "SOM LIGADO. LUZES APAGADAS."}
+        </p>
       </div>
     </div>
   );
@@ -169,13 +116,13 @@ function Intro({ onDone }: { onDone: () => void }) {
   const titles = ["I'M", "FLEXIN", "UP'"];
 
   return (
-    <div className={`editorial-intro altar-intro intro-cut-${cut}`} aria-label="Intro de I'M FLEXIN UP'">
+    <div className={`editorial-intro simple-intro intro-cut-${cut}`} aria-label="Intro de I'M FLEXIN UP'">
       <GateSound />
       <div key={cut} className="intro-flash" aria-hidden="true" />
       <div className="intro-trailer">
         <img src={cut === 1 ? img.inf8m8us.src : img.khriys.src} alt={cut === 1 ? "INF8M8US" : "Khriys"} />
       </div>
-      <div className="intro-credit editorial-label">
+      <div className="simple-intro-credit editorial-label">
         <span>KHRIYS × INF8M8US</span>
         <span>THE SINGLE · 2026</span>
       </div>
