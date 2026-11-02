@@ -271,7 +271,7 @@
 .intro-flash, .chapter-flash { position: fixed; inset: 0; background: var(--bone); pointer-events: none; opacity: 0; }
 .intro-flash { z-index: 5; animation: intro-flash-cut 100ms steps(1) 1; }
 .system-effects { pointer-events: none; position: fixed; inset: 0; z-index: 65; --signal: .15; }
-.chapter-flash.is-cut { animation: os-cut 100ms steps(1) 1; }
+.chapter-flash.is-cut { animation: intro-flash-cut 100ms steps(1) 1; }
 .system-telemetry, .system-signal { position: absolute; bottom: 96px; font-size: 8px; color: var(--bone-dim); letter-spacing: .08em; }
 .system-telemetry { left: 20px; }
 .system-signal { right: 20px; color: var(--opium); opacity: calc(.3 + var(--signal) * .7); }
