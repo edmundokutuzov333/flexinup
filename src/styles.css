@@ -409,3 +409,367 @@ footer::after { content: "PRODUCED BY INF8M8US · VOCALS BY KHRIYS · MAPUTO 202
 .d3 { bottom: -34px; left: 6px; font-size: 18px; transform: rotate(4deg); text-decoration: line-through var(--opium) 3px; }
 .bs-feature .clip-caption { margin-top: 48px; }
 @media (min-width:768px){ .bs-feature{ margin: 64px 0 88px; } .d1{font-size:34px;left:-24px} .d3{font-size:26px} }
+
+
+/* ===== THE FLEX ALTAR / ENTRY EXPERIENCE ===== */
+.editorial-gate.altar-gate {
+  --altar-tilt-x: 0deg;
+  --altar-tilt-y: 0deg;
+  --altar-spot-x: 50%;
+  --altar-spot-y: 42%;
+  position: fixed;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  display: block;
+  gap: 0;
+  color: #F1E8D6;
+  background:
+    radial-gradient(ellipse at 50% 46%, rgb(126 79 27 / .28) 0, rgb(58 39 18 / .16) 26%, transparent 56%),
+    radial-gradient(ellipse at 50% 105%, rgb(116 75 25 / .18), transparent 53%),
+    linear-gradient(145deg, #050505 0%, #14100B 47%, #050505 100%) !important;
+  text-align: center;
+}
+.altar-gate::before,
+.altar-gate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.altar-gate::before {
+  opacity: .5;
+  background:
+    repeating-linear-gradient(112deg, transparent 0 88px, rgb(240 207 143 / .025) 89px, transparent 90px 176px),
+    radial-gradient(ellipse at var(--altar-spot-x) var(--altar-spot-y), rgb(255 222 155 / .13), transparent 42%);
+}
+.altar-gate::after {
+  background: radial-gradient(ellipse at center, transparent 37%, rgb(0 0 0 / .28) 68%, rgb(0 0 0 / .88) 115%);
+}
+.altar-light {
+  position: absolute;
+  z-index: 1;
+  inset: -30%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at var(--altar-spot-x) var(--altar-spot-y), rgb(235 190 104 / .17), transparent 26%);
+  transition: background-position 180ms ease-out;
+}
+.altar-vignette {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(0 0 0 / .48), transparent 17%, transparent 72%, rgb(0 0 0 / .68));
+}
+.altar-topline {
+  position: absolute;
+  z-index: 9;
+  top: max(22px, env(safe-area-inset-top));
+  left: clamp(18px, 4vw, 54px);
+  right: clamp(18px, 4vw, 54px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  color: rgb(237 220 183 / .72);
+  font: 9px/1.4 var(--font-mono);
+  letter-spacing: .2em;
+}
+.altar-edition {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #E2C17F;
+}
+.altar-edition b {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid rgb(210 174 103 / .65);
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 400;
+}
+.altar-artists { justify-self: center; white-space: nowrap; color: #E9DEC9 !important; }
+.altar-artists i { color: #BE3531; font-style: normal; padding-inline: 5px; }
+.altar-collection { justify-self: end; text-align: right; color: rgb(237 220 183 / .54); }
+.altar-gate .gate-sound {
+  position: absolute;
+  z-index: 12;
+  top: max(54px, calc(env(safe-area-inset-top) + 46px));
+  right: clamp(18px, 4vw, 54px);
+  min-width: 58px;
+  height: 36px;
+  padding-inline: 8px;
+  border: 1px solid rgb(210 174 103 / .25);
+  background: rgb(6 5 4 / .48) !important;
+  color: #D6C39B !important;
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+.altar-portraits {
+  position: absolute;
+  z-index: 1;
+  inset: 7% 0 0;
+  pointer-events: none;
+}
+.altar-portrait {
+  position: absolute;
+  bottom: 1%;
+  width: clamp(220px, 35vw, 475px);
+  max-height: 67%;
+  object-fit: contain;
+  object-position: bottom;
+  opacity: .29;
+  filter: grayscale(1) sepia(.48) contrast(1.25) brightness(.53);
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0 63%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0 63%, transparent 100%);
+}
+.altar-portrait--left { left: -5%; transform: rotate(-5deg); }
+.altar-portrait--right { right: -5%; transform: rotate(5deg); }
+.altar-stage {
+  position: absolute;
+  z-index: 3;
+  top: 10%;
+  left: 50%;
+  width: min(100vw, 980px);
+  height: min(72vh, 760px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.altar-halo {
+  position: absolute;
+  inset: 10% 12% 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(193 139 59 / .19), rgb(127 83 31 / .07) 38%, transparent 70%);
+  filter: blur(28px);
+}
+.altar-artwork {
+  position: absolute;
+  inset: 0;
+  transform: perspective(1200px) rotateX(var(--altar-tilt-x)) rotateY(var(--altar-tilt-y));
+  transform-origin: center;
+  transform-style: preserve-3d;
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1);
+}
+.altar-artwork-float {
+  width: 100%;
+  height: 100%;
+  animation: altar-float 7.5s ease-in-out infinite;
+}
+.altar-artwork svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 24px 34px rgb(0 0 0 / .66)) drop-shadow(0 0 22px rgb(190 139 62 / .13));
+}
+.altar-reflection {
+  position: absolute;
+  inset: 4% 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(108deg, transparent 34%, rgb(255 245 211 / .04) 43%, rgb(255 249 228 / .7) 49%, rgb(219 176 95 / .18) 53%, transparent 63%);
+  transform: translateX(-130%) skewX(-18deg);
+  mix-blend-mode: screen;
+}
+.altar-gate.is-opening .altar-reflection { animation: altar-reflection-sweep 1.05s cubic-bezier(.18,.72,.22,1) both; }
+.altar-copy {
+  position: absolute;
+  z-index: 7;
+  left: 14px;
+  right: 14px;
+  bottom: clamp(118px, 17vh, 164px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  text-align: center;
+}
+.altar-eyebrow {
+  margin: 0 0 10px !important;
+  color: #C8A66B !important;
+  font: 8px/1.4 var(--font-mono) !important;
+  letter-spacing: .28em !important;
+}
+.altar-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: .76;
+  letter-spacing: -.07em;
+  text-transform: uppercase;
+  color: #EFE5D0;
+  text-shadow: 0 2px 0 #40301B, 0 12px 36px rgb(0 0 0 / .78);
+}
+.altar-title > span:first-child {
+  font-size: clamp(39px, 9.2vw, 100px);
+  white-space: nowrap;
+}
+.altar-title-up {
+  margin-top: 5px;
+  font-size: clamp(72px, 14.5vw, 150px);
+  letter-spacing: -.045em;
+  color: #D9B76F;
+  background: linear-gradient(100deg, #80602C 0%, #EBD79F 18%, #FFF1C5 32%, #9B7336 49%, #F3D58E 66%, #76501D 82%, #E7C47A 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: altar-title-shine 8s linear infinite;
+}
+.altar-title-up > span { color: #C8302C; -webkit-text-fill-color: #C8302C; }
+.altar-signature {
+  margin: 5px 0 0 !important;
+  color: #C8302C !important;
+  font: 36px/.9 var(--font-script) !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 3px 12px rgb(0 0 0 / .8);
+  transform: rotate(-4deg);
+}
+.altar-signature i { font-style: normal; font-size: .68em; padding-inline: 6px; }
+.altar-action {
+  position: absolute;
+  z-index: 10;
+  left: 16px;
+  right: 16px;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.altar-enter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: min(100%, 350px);
+  min-height: 58px;
+  padding: 0 20px;
+  overflow: hidden;
+  border: 1px solid #E6CB91 !important;
+  background: linear-gradient(110deg, #8B642C 0%, #E2C27C 35%, #F3E5BD 50%, #C29A50 75%, #77501F 100%) !important;
+  color: #0B0804 !important;
+  box-shadow: 0 8px 34px rgb(0 0 0 / .55), 0 0 32px rgb(198 147 68 / .14);
+  font: 700 10px/1 var(--font-mono) !important;
+  letter-spacing: .2em;
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
+.altar-enter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 27%, rgb(255 255 255 / .48) 49%, transparent 68%);
+  transform: translateX(-130%);
+  transition: transform 650ms ease;
+}
+.altar-enter:hover::before { transform: translateX(130%); }
+.altar-enter:hover { transform: translateY(-2px); box-shadow: 0 12px 42px rgb(0 0 0 / .6), 0 0 36px rgb(198 147 68 / .25); }
+.altar-enter:active { transform: scale(.985); filter: brightness(1.14); }
+.altar-enter:disabled { opacity: .86; cursor: progress; }
+.altar-enter-icon { font-size: 13px; }
+.altar-enter-arrow { margin-left: auto; font-size: 16px; line-height: .8; }
+.altar-action > p {
+  margin: 0 !important;
+  color: rgb(218 200 164 / .56) !important;
+  font: 8px/1.4 var(--font-mono) !important;
+  letter-spacing: .22em !important;
+}
+.altar-error {
+  min-height: 12px;
+  color: #D76C61;
+  font: 9px/1.3 var(--font-mono);
+  letter-spacing: .06em;
+}
+.altar-error:empty { display: none; }
+.altar-intro { background: #050505 !important; }
+.altar-intro > .intro-brand {
+  z-index: 2;
+  color: #F0E8D8;
+  font-size: clamp(82px, 16vw, 176px);
+  text-shadow: 0 3px 0 #49361D, 0 10px 40px rgb(0 0 0 / .9);
+  animation: brand-beat 428.57ms steps(2) infinite;
+}
+.intro-credit {
+  position: absolute;
+  z-index: 4;
+  top: max(28px, env(safe-area-inset-top));
+  left: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: rgb(232 215 181 / .62);
+  font-size: 8px;
+  letter-spacing: .18em;
+}
+@keyframes altar-float {
+  0%, 100% { transform: translateY(0) rotate(-.6deg); }
+  50% { transform: translateY(-12px) rotate(.6deg); }
+}
+@keyframes altar-reflection-sweep {
+  0% { opacity: 0; transform: translateX(-130%) skewX(-18deg); }
+  12% { opacity: .95; }
+  78% { opacity: .68; }
+  100% { opacity: 0; transform: translateX(130%) skewX(-18deg); }
+}
+@keyframes altar-title-shine {
+  0%, 70%, 100% { background-position: 100% 0; }
+  85% { background-position: -120% 0; }
+}
+@media (min-width: 768px) {
+  .altar-topline { top: 30px; }
+  .altar-gate .gate-sound { top: 72px; }
+  .altar-stage { top: 5%; width: min(92vw, 1050px); height: min(78vh, 820px); }
+  .altar-portrait { width: clamp(280px, 30vw, 470px); max-height: 72%; opacity: .34; }
+  .altar-copy { bottom: clamp(128px, 17vh, 175px); }
+  .altar-title > span:first-child { font-size: clamp(84px, 8vw, 112px); }
+  .altar-title-up { font-size: clamp(118px, 12vw, 166px); }
+  .altar-signature { font-size: 48px !important; }
+  .altar-enter { min-height: 62px; width: 360px; }
+  .altar-action { bottom: 28px; }
+}
+@media (max-width: 520px) {
+  .altar-topline { grid-template-columns: 1fr auto; top: max(18px, env(safe-area-inset-top)); gap: 8px; }
+  .altar-collection { display: none; }
+  .altar-artists { justify-self: end; font-size: 8px; letter-spacing: .14em; }
+  .altar-gate .gate-sound { top: max(52px, calc(env(safe-area-inset-top) + 44px)); right: 18px; }
+  .altar-stage { top: 12%; width: 126vw; height: min(65vh, 600px); }
+  .altar-portrait { width: 52vw; max-height: 55%; opacity: .23; }
+  .altar-portrait--left { left: -16%; }
+  .altar-portrait--right { right: -16%; }
+  .altar-copy { bottom: clamp(116px, 16vh, 145px); }
+  .altar-eyebrow { margin-bottom: 8px !important; font-size: 7px !important; letter-spacing: .2em !important; }
+  .altar-title > span:first-child { font-size: clamp(38px, 10.4vw, 56px); }
+  .altar-title-up { font-size: clamp(72px, 18vw, 94px); }
+  .altar-signature { font-size: 34px !important; }
+  .altar-action { bottom: max(14px, env(safe-area-inset-bottom)); gap: 6px; }
+  .altar-enter { min-height: 54px; width: min(100%, 330px); font-size: 9px !important; }
+  .altar-action > p { font-size: 7px !important; }
+  .intro-credit { top: max(24px, env(safe-area-inset-top)); left: 16px; right: 16px; font-size: 7px; }
+}
+@media (max-height: 700px) and (max-width: 520px) {
+  .altar-stage { top: 8%; height: 58vh; }
+  .altar-copy { bottom: 105px; }
+  .altar-title > span:first-child { font-size: 36px; }
+  .altar-title-up { font-size: 68px; }
+  .altar-signature { font-size: 29px !important; }
+  .altar-enter { min-height: 48px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .altar-artwork { transform: none !important; transition: none !important; }
+  .altar-artwork-float, .altar-title-up { animation: none !important; }
+  .altar-reflection { display: none; }
+  .altar-enter::before { display: none; }
+}
